@@ -1,0 +1,26 @@
+{
+    "name": "stayforlong/juniper",
+    "description": "Library to use with Juniper Webservice",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Raúl Morón",
+            "email": "raul@stayforlong.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "StayForLong\\Juniper\\": "src/"
+        }
+    },
+    "branch-alias": {
+        "dev-master": "dev"
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}

@@ -46,7 +46,7 @@ class JP_RequestHotelsAvail
     }
 
     /**
-     * @param ArrayOfJP_HotelRelPaxDist $RelPaxesDist
+     * @param JP_RelPaxesDist $RelPaxesDist
      * @return JP_RequestHotelsAvail
      */
     public function setRelPaxesDist($RelPaxesDist)
