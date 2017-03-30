@@ -4,34 +4,20 @@ namespace StayForLong\Juniper;
 
 use Carbon\Carbon;
 
-class ServiceHotelAvailability
+class HotelAvailability
 {
 	/**
-	 * @var \JP_Login
+	 * @var JuniperService
 	 */
-	private $login;
+	private $juniperService;
 
 	/**
-	 * @var ServiceRequest
+	 * ServiceZoneList constructor.
+	 * @param JuniperService $juniperService
 	 */
-	private $service;
-
-	/**
-	 * @var string
-	 */
-	private $language;
-
-	/**
-	 * ServiceHotelAvailability constructor.
-	 * @param \JP_Login $login
-	 * @param \WebServiceJP $service
-	 * @param string $language
-	 */
-	public function __construct(\JP_Login $login, \WebServiceJP $service, $language = ServiceRequest::DEFAULT_LANGUAGE)
+	public function __construct(JuniperService $juniperService)
 	{
-		$this->login    = $login;
-		$this->service  = $service;
-		$this->language = $language;
+		$this->juniperService = $juniperService;
 	}
 
 	public function __invoke(array $hotels_code, array $paxes, $start, $end, $country_of_residence)
@@ -127,8 +113,6 @@ class ServiceHotelAvailability
 		$advancedOptions->setExcludeNonRefundable(false);
 		$advancedOptions->setShowCancellationPolicies(true);
 		$advancedOptions->setShowAllCombinations(false);
-		//		$advancedOptions->setShowAllRates(true); // The AdvancedOption ShowAllRates is not allowed. Please contact with XML support
-		//		$advancedOptions->setShowAllPortfolio(true); // The AdvancedOption ShowAllPortfolio is not allowed. Please contact with XML support
 		$advancedOptions->setShowOnlyBestPriceCombination(false);
 		$advancedOptions->setShowAllChildrenCombinations(true);
 		return $advancedOptions;
@@ -142,10 +126,10 @@ class ServiceHotelAvailability
 	 */
 	private function getHotelAvailRQ(array $paxes, $advancedOptions, $hotelRequest)
 	{
-		$hotelAvailRQ = new \JP_HotelAvail(ServiceRequest::JUNIPER_WS_VERSION, $this->language);
+		$hotelAvailRQ = new \JP_HotelAvail(ServiceRequest::JUNIPER_WS_VERSION, $this->juniperService->getLanguage());
 		$hotelAvailRQ->setAdvancedOptions($advancedOptions);
 		$hotelAvailRQ->setHotelRequest($hotelRequest);
-		$hotelAvailRQ->setLogin($this->login);
+		$hotelAvailRQ->setLogin($this->juniperService->getLogin());
 
 		$pax = [];
 		foreach ($paxes as $key => $pax_parameter) {
@@ -166,7 +150,7 @@ class ServiceHotelAvailability
 	private function getHotelAvail($hotelAvailRQ)
 	{
 		$hotelAvail = new \HotelAvail($hotelAvailRQ);
-		$response   = $this->service->HotelAvail($hotelAvail);
+		$response   = $this->juniperService->getService()->HotelAvail($hotelAvail);
 		return $response;
 	}
 }

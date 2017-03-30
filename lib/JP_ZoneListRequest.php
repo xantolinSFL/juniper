@@ -19,7 +19,7 @@ class JP_ZoneListRequest
     protected $MaxLevel = null;
 
     /**
-     * @param JP_ProductType $ProductType
+     * @param string $ProductType
      * @param boolean $ShowIATA
      * @param int $MaxLevel
      */
