@@ -17,12 +17,12 @@ class Login
 
 	/**
 	 * Login constructor.
-	 * @param $email
-	 * @param $password
+	 * @param string $email
+	 * @param string $password
 	 */
 	public function __construct($email, $password)
 	{
-		$this->login = new \JP_Login($email, $password);
+		$this->login = new \JP_Login($password, $email);
 	}
 
 	/**

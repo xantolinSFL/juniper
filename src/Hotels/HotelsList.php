@@ -1,40 +1,35 @@
 <?php
 
-namespace StayForLong\Juniper;
+namespace StayForLong\Juniper\Hotels;
 
-class ServiceHotelsList
+use StayForLong\Juniper\JuniperService;
+use StayForLong\Juniper\ServiceRequest;
+
+class HotelsList
 {
 	/**
-	 * @var \JP_Login
+	 * @var JuniperService
 	 */
-	private $login;
+	private $juniperService;
 
 	/**
-	 * @var ServiceRequest
+	 * ServiceZoneList constructor.
+	 * @param JuniperService $juniperService
 	 */
-	private $service;
-
-	/**
-	 * ServiceHotelsList constructor.
-	 * @param \JP_Login $login
-	 * @param \WebServiceJP $service
-	 */
-	public function __construct(\JP_Login $login, \WebServiceJP $service)
+	public function __construct(JuniperService $juniperService)
 	{
-		$this->login   = $login;
-		$this->service = $service;
+		$this->juniperService = $juniperService;
 	}
 
 	/**
 	 * @param $zone_code
-	 * @param string $language
 	 * @param bool $show_basic_info
 	 * @return array
 	 */
-	public function __invoke($zone_code, $language = ServiceRequest::DEFAULT_LANGUAGE, $show_basic_info = false)
+	public function __invoke($zone_code, $show_basic_info = false)
 	{
 		$hotelListRequest = new \JP_HotelListRequest($zone_code, $show_basic_info);
-		$hotelListRQ      = $this->getHotelListRQ($language, $hotelListRequest);
+		$hotelListRQ      = $this->getHotelListRQ($hotelListRequest);
 
 		$response = $this->getHotelList($hotelListRQ);
 
@@ -54,26 +49,25 @@ class ServiceHotelsList
 	}
 
 	/**
-	 * @param $language
-	 * @param $hotelListRequest
+	 * @param \JP_HotelListRequest $hotelListRequest
 	 * @return \JP_HotelListRQ
 	 */
-	private function getHotelListRQ($language, $hotelListRequest)
+	private function getHotelListRQ(\JP_HotelListRequest $hotelListRequest)
 	{
-		$hotelListRQ = new \JP_HotelListRQ(ServiceRequest::JUNIPER_WS_VERSION, $language);
-		$hotelListRQ->setLogin($this->login);
+		$hotelListRQ = new \JP_HotelListRQ(ServiceRequest::JUNIPER_WS_VERSION, $this->juniperService->getLanguage());
+		$hotelListRQ->setLogin($this->juniperService->getLogin());
 		$hotelListRQ->setHotelListRequest($hotelListRequest);
 		return $hotelListRQ;
 	}
 
 	/**
-	 * @param $hotelListRQ
+	 * @param \JP_HotelListRQ $hotelListRQ
 	 * @return \HotelListResponse
 	 */
-	private function getHotelList($hotelListRQ)
+	private function getHotelList(\JP_HotelListRQ $hotelListRQ)
 	{
 		$hotelList = new \HotelList($hotelListRQ);
-		$response  = $this->service->HotelList($hotelList);
+		$response  = $this->juniperService->getService()->HotelList($hotelList);
 		return $response;
 	}
 }
