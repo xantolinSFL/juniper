@@ -31,10 +31,7 @@ class Features
 	{
 		$features = [];
 		foreach ($this->arrayOfJP_Feature as $feature) {
-			$features[] = [
-				"feature" => $feature->get_(),
-				"type" => $feature->getType(),
-			];
+			$features[] = new Feature($feature);
 		}
 
 		return $features;

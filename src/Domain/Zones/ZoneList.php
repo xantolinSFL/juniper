@@ -1,6 +1,6 @@
 <?php
 
-namespace StayForLong\Juniper\Zones;
+namespace StayForLong\Juniper\Domain\Zones;
 
 use Juniper\Webservice\JP_ProductType;
 use Juniper\Webservice\JP_ZoneListRequest;

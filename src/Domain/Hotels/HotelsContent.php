@@ -11,6 +11,8 @@ use Juniper\Webservice\JP_HotelSimpleContent;
 use StayForLong\Juniper\Domain\Hotel\ContactInfo;
 use StayForLong\Juniper\Domain\Hotel\Descriptions;
 use StayForLong\Juniper\Domain\Hotel\Features;
+use StayForLong\Juniper\Domain\Hotel\Provider;
+use StayForLong\Juniper\Domain\Hotel\Providers;
 use StayForLong\Juniper\Domain\Hotel\Rooms;
 use StayForLong\Juniper\Infrastructure\Services\JuniperWebService;
 use StayForLong\Juniper\Infrastructure\Services\WebService;
@@ -68,6 +70,7 @@ class HotelsContent
 			$features     = $this->getHotelFeatures($item);
 			$rooms        = $this->getHotelRooms($item);
 			$contact_info = $this->getContactInfo($item);
+			$providers    = $this->getProviders($item);
 
 			$hotels_content[] = [
 				"code"         => $item->getCode(),
@@ -80,7 +83,7 @@ class HotelsContent
 				"contact_info" => $contact_info,
 				"features"     => $features,
 				"rooms"        => $rooms,
-				"providers"    => $item->getContentProviders(),
+				"providers"    => $providers,
 			];
 
 		}
@@ -98,7 +101,6 @@ class HotelsContent
 		$hotelContentList->setHotel($hotelsCodes);
 		return $hotelContentList;
 	}
-
 
 	/**
 	 * @param ArrayOfJP_HotelSimpleContent $hotelContentList
@@ -137,6 +139,21 @@ class HotelsContent
 			return $descriptions;
 		}
 		return $descriptions;
+	}
+
+	/**
+	 * @param JP_HotelContent $item
+	 * @return array
+	 */
+	private function getProviders(JP_HotelContent $item)
+	{
+		$providers = [];
+		if($item->getContentProviders()){
+			$contentProviders = new Providers($item->getContentProviders());
+			$providers = $contentProviders->__invoke();
+			return $providers;
+		}
+		return $providers;
 	}
 
 	/**
