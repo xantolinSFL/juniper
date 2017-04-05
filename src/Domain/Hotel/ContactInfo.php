@@ -55,7 +55,7 @@ class ContactInfo
 	/**
 	 * @return array
 	 */
-	public function getPhones()
+	public function phones()
 	{
 		return $this->phones;
 	}
@@ -63,7 +63,7 @@ class ContactInfo
 	/**
 	 * @return array
 	 */
-	public function getEmails()
+	public function emails()
 	{
 		return $this->emails;
 	}
@@ -71,7 +71,7 @@ class ContactInfo
 	/**
 	 * @return array
 	 */
-	public function getFaxes()
+	public function faxes()
 	{
 		return $this->faxes;
 	}

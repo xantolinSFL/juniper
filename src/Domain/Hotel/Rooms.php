@@ -25,20 +25,13 @@ class Rooms
 	}
 
 	/**
-	 * @return array
+	 * @return Room[]
 	 */
 	public function __invoke()
 	{
 		$rooms = [];
 		foreach ($this->arrayOfJP_HotelRoom as $room) {
-			$rooms[] = [
-				"code"        => $room->getCode(),
-				"name"        => $room->getName(),
-				"description" => $room->getDescription(),
-				"images"      => $room->getImages(),
-				"size"        => $room->getSize(),
-				"units"       => $room->getUnits(),
-			];
+			$rooms[] = new Room($room);
 		}
 
 		return $rooms;

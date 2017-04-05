@@ -6,7 +6,7 @@ use Juniper\Webservice\HotelList;
 use Juniper\Webservice\JP_HotelListRequest;
 use Juniper\Webservice\JP_HotelListRQ;
 use StayForLong\Juniper\Infrastructure\Services\JuniperWebService;
-use StayForLong\Juniper\Infrastructure\Services\ServiceRequest;
+use StayForLong\Juniper\Infrastructure\Services\WebService;
 
 /**
  * Class HotelsList
@@ -61,8 +61,8 @@ class HotelsList
 	 */
 	private function getHotelListRQ(JP_HotelListRequest $hotelListRequest)
 	{
-		$hotelListRQ = new JP_HotelListRQ(ServiceRequest::JUNIPER_WS_VERSION, $this->juniperWebService->getLanguage());
-		$hotelListRQ->setLogin($this->juniperWebService->getLogin());
+		$hotelListRQ = new JP_HotelListRQ(WebService::JUNIPER_WS_VERSION, $this->juniperWebService->language());
+		$hotelListRQ->setLogin($this->juniperWebService->login());
 		$hotelListRQ->setHotelListRequest($hotelListRequest);
 		return $hotelListRQ;
 	}
@@ -74,7 +74,7 @@ class HotelsList
 	private function getHotelList(JP_HotelListRQ $hotelListRQ)
 	{
 		$hotelList = new HotelList($hotelListRQ);
-		$response  = $this->juniperWebService->getService()->HotelList($hotelList);
+		$response  = $this->juniperWebService->service()->HotelList($hotelList);
 		return $response;
 	}
 }

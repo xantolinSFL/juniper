@@ -127,8 +127,8 @@ class ZoneList
 	 */
 	private function getZoneListRQ(JP_ZoneListRequest $zoneListRequest)
 	{
-		$zoneListRQ = new JP_ZoneListRQ(WebService::JUNIPER_WS_VERSION, $this->juniperWebService->getLanguage());
-		$zoneListRQ->setLogin($this->juniperWebService->getLogin());
+		$zoneListRQ = new JP_ZoneListRQ(WebService::JUNIPER_WS_VERSION, $this->juniperWebService->language());
+		$zoneListRQ->setLogin($this->juniperWebService->login());
 		$zoneListRQ->setZoneListRequest($zoneListRequest);
 
 		return $zoneListRQ;
@@ -141,7 +141,7 @@ class ZoneList
 	private function getZoneList(JP_ZoneListRQ $zoneListRQ)
 	{
 		$zoneList = new JuniperZoneList($zoneListRQ);
-		$response = $this->juniperWebService->getService()->ZoneList($zoneList);
+		$response = $this->juniperWebService->service()->ZoneList($zoneList);
 		return $response;
 	}
 }

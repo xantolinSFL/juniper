@@ -17,7 +17,7 @@ use Juniper\Webservice\JP_RequestHotelsAvail;
 use Juniper\Webservice\JP_SearchSegmentHotels;
 use Juniper\Webservice\JP_SearchSegmentsHotels;
 use StayForLong\Juniper\Infrastructure\Services\JuniperWebService;
-use StayForLong\Juniper\Infrastructure\Services\ServiceRequest;
+use StayForLong\Juniper\Infrastructure\Services\WebService;
 
 /**
  * Class Availability
@@ -30,79 +30,81 @@ class Availability
 	 */
 	private $juniperWebService;
 
+	private $paxes;
+	private $nights;
+	private $country;
+
 	/**
-	 * ServiceZoneList constructor.
+	 * Availability constructor.
 	 * @param JuniperWebService $juniperWebService
+	 * @param Pax[] $paxes
+	 * @param Nights $nights
+	 * @param Country $country
 	 */
-	public function __construct(JuniperWebService $juniperWebService)
+	public function __construct(JuniperWebService $juniperWebService, $paxes, Nights $nights, Country $country)
 	{
 		$this->juniperWebService = $juniperWebService;
+		$this->paxes             = $paxes;
+		$this->nights            = $nights;
+		$this->country           = $country;
 	}
 
 	/**
 	 * @param array $hotels_code
-	 * @param array $paxes
-	 * @param $start
-	 * @param $end
-	 * @param $country_of_residence
+	 * @return \Juniper\Webservice\JP_HotelResult[]
 	 */
-	public function __invoke(array $hotels_code, array $paxes, $start, $end, $country_of_residence)
+	public function __invoke(array $hotels_code)
 	{
 		if (empty($hotels_code)) {
 			ServiceHotelAvailabilityException::throwBecauseOfHotelCodeEmpty();
 		}
 
-		$searchSegmentsHotels = $this->getSearchSegmentsHotels($hotels_code, $start, $end, $country_of_residence);
-		$relPaxesDist         = $this->getRelPaxesDist($paxes);
+		$searchSegmentsHotels = $this->getSearchSegmentsHotels($hotels_code);
+		$relPaxesDist         = $this->getRelPaxesDist();
 		$hotelRequest         = $this->getHotelRequest($searchSegmentsHotels, $relPaxesDist);
-		$advancedOptions      = $this->getAdvancedOptions();
-		$hotelAvailRQ         = $this->getHotelAvailRQ($paxes, $advancedOptions, $hotelRequest);
+		$hotelAvailRQ         = $this->getHotelAvailRQ($hotelRequest);
 		$response             = $this->getHotelAvail($hotelAvailRQ);
 
 		if ($response->getAvailabilityRS()->getErrors()) {
 			foreach ($response->getAvailabilityRS()->getErrors()->getError() as $error) {
 				ServiceHotelAvailabilityException::throwBecauseOf($error->getText());
 			}
+
 			return;
 		}
 
-		return $response->getAvailabilityRS()->getResults();
+		return $response->getAvailabilityRS()->getResults()->getHotelResult();
 	}
 
 	/**
 	 * @param array $hotels_code
-	 * @param $start
-	 * @param $end
-	 * @param $country_of_residence
 	 * @return JP_SearchSegmentsHotels
 	 */
-	private function getSearchSegmentsHotels(array $hotels_code, $start, $end, $country_of_residence)
+	private function getSearchSegmentsHotels(array $hotels_code)
 	{
-		$nights = Carbon::parse($start)->diffInDays(Carbon::parse($end));
-
-		$searchSegmentHotels = new JP_SearchSegmentHotels($start, $end, $OriginZone = null, $JPDCode = null,
+		$searchSegmentHotels  = new JP_SearchSegmentHotels($this->nights->startToString(), $this->nights->endToString(),
+			$OriginZone = null, $JPDCode = null,
 			$DestinationZone = null);
-
 		$arrayOfString        = new ArrayOfString5();
 		$hotelCodes           = $arrayOfString->setHotelCode($hotels_code);
 		$searchSegmentsHotels = new JP_SearchSegmentsHotels();
 		$searchSegmentsHotels->setSearchSegmentHotels($searchSegmentHotels)
-			->setCountryOfResidence($country_of_residence)
-			->setNights($nights)
+			->setCountryOfResidence($this->country->isoCode())
+			->setNights($this->nights->number())
 			->setHotelCodes($hotelCodes);
 
 		return $searchSegmentsHotels;
 	}
 
 	/**
-	 * @param array $paxes
 	 * @return JP_RelPaxesDist
 	 */
-	private function getRelPaxesDist(array $paxes)
+	private function getRelPaxesDist()
 	{
 		$relPax = [];
-		foreach ($paxes as $key => $pax_parameter) {
-			$relPax[] = new JP_RelPax($key + 1);
+		foreach ($this->paxes as $key => $pax) {
+			$pax->idPax();
+			$relPax[] = new JP_RelPax($pax->idPax());
 		}
 
 		$arrayOfJP_RelPax = new ArrayOfJP_RelPax();
@@ -149,27 +151,29 @@ class Availability
 	}
 
 	/**
-	 * @param array $paxes
-	 * @param JP_HotelAvailAdvancedOptions $JP_HotelAvailAdvancedOptions
 	 * @param JP_RequestHotelsAvail $JP_RequestHotelsAvail
 	 * @return JP_HotelAvail
 	 */
-	private function getHotelAvailRQ(array $paxes, JP_HotelAvailAdvancedOptions $JP_HotelAvailAdvancedOptions, JP_RequestHotelsAvail $JP_RequestHotelsAvail)
-	{
-		$hotelAvailRQ = new JP_HotelAvail(ServiceRequest::JUNIPER_WS_VERSION, $this->juniperWebService->getLanguage());
+	private function getHotelAvailRQ(
+		JP_RequestHotelsAvail $JP_RequestHotelsAvail
+	) {
+		$JP_HotelAvailAdvancedOptions = $this->getAdvancedOptions();
+
+		$hotelAvailRQ = new JP_HotelAvail(WebService::JUNIPER_WS_VERSION, $this->juniperWebService->language());
 		$hotelAvailRQ->setAdvancedOptions($JP_HotelAvailAdvancedOptions);
 		$hotelAvailRQ->setHotelRequest($JP_RequestHotelsAvail);
-		$hotelAvailRQ->setLogin($this->juniperWebService->getLogin());
+		$hotelAvailRQ->setLogin($this->juniperWebService->login());
 
-		$pax = [];
-		foreach ($paxes as $key => $pax_parameter) {
-			$pax[$key] = new JP_Pax($key + 1, $gender = null);
-			$pax[$key]->setAge(30);
+		$jp_pax = [];
+		foreach ($this->paxes as $key => $pax) {
+			$jp_pax[$key] = new JP_Pax($pax->idPax(), $gender = null);
+			$jp_pax[$key]->setAge($pax->age());
 		}
 
 		$paxes = new JP_Paxes($AdultsFree = 0, $ChildrenFree = 0);
-		$paxes->setPax($pax);
+		$paxes->setPax($jp_pax);
 		$hotelAvailRQ->setPaxes($paxes);
+
 		return $hotelAvailRQ;
 	}
 
@@ -180,7 +184,7 @@ class Availability
 	private function getHotelAvail($hotelAvailRQ)
 	{
 		$hotelAvail = new HotelAvail($hotelAvailRQ);
-		$response   = $this->juniperWebService->getService()->HotelAvail($hotelAvail);
+		$response   = $this->juniperWebService->service()->HotelAvail($hotelAvail);
 		return $response;
 	}
 }

@@ -30,12 +30,10 @@ class Descriptions
 	public function __invoke()
 	{
 		$descriptions = [];
-		foreach ($this->arrayOfJP_Description as $description) {
+		foreach ($this->arrayOfJP_Description as $JP_description) {
+			$description  =new Description($JP_description);
 			$type = $description->getType();
-			$descriptions[$type] = [
-				"text" => $description->get_(),
-				"type" => $description->getType(),
-			];
+			$descriptions[$type] = $description;
 		}
 
 		return $descriptions;

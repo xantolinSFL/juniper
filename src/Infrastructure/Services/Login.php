@@ -28,7 +28,7 @@ class Login
 	/**
 	 * @return JP_Login
 	 */
-	public function __invoke()
+	public function getJPLogin()
 	{
 		return $this->login;
 	}

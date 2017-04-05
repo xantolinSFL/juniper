@@ -4,8 +4,6 @@ namespace StayForLong\Juniper\Infrastructure\Services;
 
 use Juniper\Webservice\WebServiceJP;
 
-require "../../../lib/autoload.php";
-
 /**
  * Class ServiceRequest
  * @package StayForLong\Juniper\Infrastructure\Services
@@ -37,7 +35,7 @@ class WebService
 	/**
 	 * @return WebServiceJP
 	 */
-	public function __invoke()
+	public function getWebServiceJP()
 	{
 		return $this->service;
 	}

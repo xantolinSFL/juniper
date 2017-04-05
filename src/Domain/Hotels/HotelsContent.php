@@ -4,6 +4,7 @@ namespace StayForLong\Juniper\Hotels;
 
 use Juniper\Webservice\ArrayOfJP_HotelSimpleContent;
 use Juniper\Webservice\HotelContent;
+use Juniper\Webservice\JP_ContactInfo;
 use Juniper\Webservice\JP_HotelContent;
 use Juniper\Webservice\JP_HotelContentRQ;
 use Juniper\Webservice\JP_HotelSimpleContent;
@@ -12,7 +13,7 @@ use StayForLong\Juniper\Domain\Hotel\Descriptions;
 use StayForLong\Juniper\Domain\Hotel\Features;
 use StayForLong\Juniper\Domain\Hotel\Rooms;
 use StayForLong\Juniper\Infrastructure\Services\JuniperWebService;
-use StayForLong\Juniper\Infrastructure\Services\ServiceRequest;
+use StayForLong\Juniper\Infrastructure\Services\WebService;
 
 /**
  * Class HotelsContent
@@ -50,7 +51,7 @@ class HotelsContent
 		}
 
 		$hotelContentList = $this->getHotelContentList($hotelsCodes);
-		$hotelContentRQ   = $this->getHotelContentRQ($hotelContentList, $this->juniperWebService->getLanguage());
+		$hotelContentRQ   = $this->getHotelContentRQ($hotelContentList, $this->juniperWebService->language());
 		$response         = $this->getHotelContent($hotelContentRQ);
 
 		if ($response->getContentRS()->getErrors()) {
@@ -64,22 +65,22 @@ class HotelsContent
 		foreach ($result as $item) {
 
 			$descriptions = $this->getHotelDescription($item);
-			$features = $this->getHotelFeatures($item);
-			$rooms = $this->getHotelRooms($item);
+			$features     = $this->getHotelFeatures($item);
+			$rooms        = $this->getHotelRooms($item);
 			$contact_info = $this->getContactInfo($item);
 
 			$hotels_content[] = [
-				"code"        => $item->getCode(),
-				"name"        => $item->getHotelName(),
-				"category"    => $item->getHotelCategory()->getType(),
-				"address"     => $item->getAddress()->getAddress(),
-				"latitude"    => $item->getAddress()->getLatitude(),
-				"longitude"   => $item->getAddress()->getLongitude(),
-				"description" => $descriptions,
-				"contact_info"      => $contact_info,
-				"features"    => $features,
-				"rooms"       => $rooms,
-				"providers"   => $item->getContentProviders(),
+				"code"         => $item->getCode(),
+				"name"         => $item->getHotelName(),
+				"category"     => $item->getHotelCategory()->getType(),
+				"address"      => $item->getAddress()->getAddress(),
+				"latitude"     => $item->getAddress()->getLatitude(),
+				"longitude"    => $item->getAddress()->getLongitude(),
+				"description"  => $descriptions,
+				"contact_info" => $contact_info,
+				"features"     => $features,
+				"rooms"        => $rooms,
+				"providers"    => $item->getContentProviders(),
 			];
 
 		}
@@ -106,8 +107,8 @@ class HotelsContent
 	 */
 	private function getHotelContentRQ(ArrayOfJP_HotelSimpleContent $hotelContentList, $language)
 	{
-		$hotelContentRQ = new JP_HotelContentRQ(ServiceRequest::JUNIPER_WS_VERSION, $language);
-		$hotelContentRQ->setLogin($this->juniperWebService->getLogin());
+		$hotelContentRQ = new JP_HotelContentRQ(WebService::JUNIPER_WS_VERSION, $language);
+		$hotelContentRQ->setLogin($this->juniperWebService->login());
 		$hotelContentRQ->setHotelContentList($hotelContentList);
 		return $hotelContentRQ;
 	}
@@ -119,7 +120,7 @@ class HotelsContent
 	private function getHotelContent(JP_HotelContentRQ $hotelContentRQ)
 	{
 		$hotelContent = new HotelContent($hotelContentRQ);
-		$response     = $this->juniperWebService->getService()->HotelContent($hotelContent);
+		$response     = $this->juniperWebService->service()->HotelContent($hotelContent);
 		return $response;
 	}
 
@@ -132,7 +133,7 @@ class HotelsContent
 		$descriptions = [];
 		if ($item->getDescriptions()) {
 			$hotelDescription = new Descriptions($item->getDescriptions());
-			$descriptions     = $hotelDescription();
+			$descriptions     = $hotelDescription->__invoke();
 			return $descriptions;
 		}
 		return $descriptions;
@@ -147,7 +148,7 @@ class HotelsContent
 		$features = [];
 		if ($JP_HotelContent->getFeatures()) {
 			$hotelFeatures = new Features($JP_HotelContent->getFeatures());
-			$features      = $hotelFeatures();
+			$features      = $hotelFeatures->__invoke();
 			return $features;
 		}
 		return $features;
@@ -162,7 +163,7 @@ class HotelsContent
 		$rooms = [];
 		if ($JP_HotelContent->getHotelRooms()) {
 			$hotelRooms = new Rooms($JP_HotelContent->getHotelRooms());
-			$rooms      = $hotelRooms();
+			$rooms      = $hotelRooms->__invoke();
 			return $rooms;
 		}
 		return $rooms;
@@ -170,21 +171,16 @@ class HotelsContent
 
 	/**
 	 * @param JP_HotelContent $JP_HotelContent
-	 * @return array
+	 * @return ContactInfo
 	 */
 	private function getContactInfo(JP_HotelContent $JP_HotelContent)
 	{
-		$contact_info = [];
-		if ($JP_HotelContent->getContactInfo()) {
-			$hotelContactInfo = new ContactInfo($JP_HotelContent->getContactInfo());
-			$contact_info = [
-				"phones" => $hotelContactInfo->getPhones(),
-				"emails" => $hotelContactInfo->getEmails(),
-				"faxes" => $hotelContactInfo->getFaxes(),
-			];
+		if (!$JP_HotelContent->getContactInfo()) {
+			return new ContactInfo(new JP_ContactInfo());
 		}
 
-		return $contact_info;
+		$hotelContactInfo = new ContactInfo($JP_HotelContent->getContactInfo());
+		return $hotelContactInfo;
 	}
 }
 

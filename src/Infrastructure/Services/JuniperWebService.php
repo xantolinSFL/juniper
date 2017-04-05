@@ -2,6 +2,9 @@
 
 namespace StayForLong\Juniper\Infrastructure\Services;
 
+use Juniper\Webservice\JP_Login;
+use Juniper\Webservice\WebServiceJP;
+
 /**
  * Class JuniperWebService
  * @package StayForLong\Juniper\Infrastructure\Services
@@ -40,25 +43,25 @@ class JuniperWebService
 	}
 
 	/**
-	 * @return Login
+	 * @return JP_Login
 	 */
-	public function getLogin()
+	public function login()
 	{
-		return $this->login;
+		return $this->login->getJPLogin();
 	}
 
 	/**
-	 * @return WebService
+	 * @return WebServiceJP
 	 */
-	public function getService()
+	public function service()
 	{
-		return $this->service;
+		return $this->service->getWebServiceJP();
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getLanguage()
+	public function language()
 	{
 		return $this->language;
 	}
