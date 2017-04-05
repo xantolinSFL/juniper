@@ -1,11 +1,17 @@
 <?php
 
-namespace StayForLong\Juniper\Hotels;
+namespace StayForLong\Juniper\Domain\Hotel;
 
-class HotelContactInfo
+use Juniper\Webservice\JP_ContactInfo;
+
+/**
+ * Class ContactInfo
+ * @package StayForLong\Juniper\Domain\Hotel
+ */
+class ContactInfo
 {
 	/**
-	 * @var \JP_ContactInfo
+	 * @var JP_ContactInfo
 	 */
 	private $contactInfo;
 
@@ -23,10 +29,10 @@ class HotelContactInfo
 	private $emails = [];
 
 	/**
-	 * HotelContactInfo constructor.
-	 * @param \JP_ContactInfo $contactInfo
+	 * ContactInfo constructor.
+	 * @param JP_ContactInfo $contactInfo
 	 */
-	public function __construct(\JP_ContactInfo $contactInfo)
+	public function __construct(JP_ContactInfo $contactInfo)
 	{
 		$this->contactInfo = $contactInfo;
 	}

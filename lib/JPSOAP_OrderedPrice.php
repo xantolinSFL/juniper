@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JPSOAP_OrderedPrice extends JPSOAP_Price
 {
 

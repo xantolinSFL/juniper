@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_SearchSegmentRentacar extends JP_SearchSegmentBase
 {
 

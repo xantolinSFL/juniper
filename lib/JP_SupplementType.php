@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_SupplementType
 {
     const __default = 'M';

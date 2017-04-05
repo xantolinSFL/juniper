@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JPSOAP_SupplementType
 {
     const __default = 'Basic';
@@ -8,7 +10,7 @@ class JPSOAP_SupplementType
     const PickUpPoint = 'PickUpPoint';
     const MealPlan = 'MealPlan';
     const RoomPlan = 'RoomPlan';
-    const IndividualUse = 'IndividualUse';
+    const Individualnamespace = 'IndividualUse';
 
 
 }

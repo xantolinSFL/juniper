@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_TransferItem extends JP_BaseItem
 {
 

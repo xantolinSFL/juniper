@@ -14,7 +14,8 @@
     },
     "autoload": {
         "psr-4": {
-            "StayForLong\\Juniper\\": "src/"
+            "StayForLong\\Juniper\\": "src/",
+            "Juniper\\Webservice\\": "lib/"
         }
     },
     "branch-alias": {

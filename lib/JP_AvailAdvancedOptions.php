@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 abstract class JP_AvailAdvancedOptions extends JP_BaseAdvancedOptions
 {
 

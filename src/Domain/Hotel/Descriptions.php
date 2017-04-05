@@ -1,19 +1,25 @@
 <?php
 
-namespace StayForLong\Juniper\Hotels;
+namespace StayForLong\Juniper\Domain\Hotel;
 
-class HotelDescriptions
+use Juniper\Webservice\ArrayOfJP_Description;
+
+/**
+ * Class Descriptions
+ * @package StayForLong\Juniper\Domain\Hotel
+ */
+class Descriptions
 {
 	/**
-	 * @var array|\ArrayOfJP_Description
+	 * @var ArrayOfJP_Description
 	 */
 	private $arrayOfJP_Description = [];
 
 	/**
-	 * HotelDescriptions constructor.
-	 * @param \ArrayOfJP_Description $arrayOfJP_Description
+	 * Descriptions constructor.
+	 * @param ArrayOfJP_Description $arrayOfJP_Description
 	 */
-	public function __construct(\ArrayOfJP_Description $arrayOfJP_Description)
+	public function __construct(ArrayOfJP_Description $arrayOfJP_Description)
 	{
 		$this->arrayOfJP_Description = $arrayOfJP_Description;
 	}

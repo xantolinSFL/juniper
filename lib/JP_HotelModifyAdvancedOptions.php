@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_HotelModifyAdvancedOptions extends JP_ModifyAdvancedOptions
 {
 

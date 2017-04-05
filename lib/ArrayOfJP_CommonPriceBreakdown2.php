@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class ArrayOfJP_CommonPriceBreakdown2 implements \ArrayAccess, \Iterator, \Countable
 {
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_FlightElement extends JP_BaseElement
 {
 

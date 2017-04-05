@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 
  function autoload_79e2cdec0fc25d4182278572d57a4ce2($class)
 {

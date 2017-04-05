@@ -2,23 +2,36 @@
 
 namespace StayForLong\Juniper\Hotels;
 
-use StayForLong\Juniper\JuniperService;
-use StayForLong\Juniper\ServiceRequest;
+use Juniper\Webservice\ArrayOfJP_HotelSimpleContent;
+use Juniper\Webservice\HotelContent;
+use Juniper\Webservice\JP_HotelContent;
+use Juniper\Webservice\JP_HotelContentRQ;
+use Juniper\Webservice\JP_HotelSimpleContent;
+use StayForLong\Juniper\Domain\Hotel\ContactInfo;
+use StayForLong\Juniper\Domain\Hotel\Descriptions;
+use StayForLong\Juniper\Domain\Hotel\Features;
+use StayForLong\Juniper\Domain\Hotel\Rooms;
+use StayForLong\Juniper\Infrastructure\Services\JuniperWebService;
+use StayForLong\Juniper\Infrastructure\Services\ServiceRequest;
 
+/**
+ * Class HotelsContent
+ * @package StayForLong\Juniper\Hotels
+ */
 class HotelsContent
 {
 	/**
-	 * @var JuniperService
+	 * @var JuniperWebService
 	 */
-	private $juniperService;
+	private $juniperWebService;
 
 	/**
 	 * ServiceZoneList constructor.
-	 * @param JuniperService $juniperService
+	 * @param JuniperWebService $juniperWebService
 	 */
-	public function __construct(JuniperService $juniperService)
+	public function __construct(JuniperWebService $juniperWebService)
 	{
-		$this->juniperService = $juniperService;
+		$this->juniperWebService = $juniperWebService;
 	}
 
 	/**
@@ -33,11 +46,11 @@ class HotelsContent
 
 		$hotelsCodes = [];
 		foreach ($hotels_code as $hotel_code) {
-			$hotelsCodes[] = new \JP_HotelSimpleContent($hotel_code, null);
+			$hotelsCodes[] = new JP_HotelSimpleContent($hotel_code, null);
 		}
 
 		$hotelContentList = $this->getHotelContentList($hotelsCodes);
-		$hotelContentRQ   = $this->getHotelContentRQ($hotelContentList, $this->juniperService->getLanguage());
+		$hotelContentRQ   = $this->getHotelContentRQ($hotelContentList, $this->juniperWebService->getLanguage());
 		$response         = $this->getHotelContent($hotelContentRQ);
 
 		if ($response->getContentRS()->getErrors()) {
@@ -75,49 +88,50 @@ class HotelsContent
 	}
 
 	/**
-	 * @param \JP_HotelSimpleContent[] $hotelsCodes
-	 * @return \ArrayOfJP_HotelSimpleContent
+	 * @param $hotelsCodes
+	 * @return ArrayOfJP_HotelSimpleContent
 	 */
 	private function getHotelContentList($hotelsCodes)
 	{
-		$hotelContentList = new \ArrayOfJP_HotelSimpleContent();
+		$hotelContentList = new ArrayOfJP_HotelSimpleContent();
 		$hotelContentList->setHotel($hotelsCodes);
 		return $hotelContentList;
 	}
 
+
 	/**
-	 * @param \ArrayOfJP_HotelSimpleContent $hotelContentList
+	 * @param ArrayOfJP_HotelSimpleContent $hotelContentList
 	 * @param $language
-	 * @return \JP_HotelContentRQ
+	 * @return JP_HotelContentRQ
 	 */
-	private function getHotelContentRQ(\ArrayOfJP_HotelSimpleContent $hotelContentList, $language)
+	private function getHotelContentRQ(ArrayOfJP_HotelSimpleContent $hotelContentList, $language)
 	{
-		$hotelContentRQ = new \JP_HotelContentRQ(ServiceRequest::JUNIPER_WS_VERSION, $language);
-		$hotelContentRQ->setLogin($this->juniperService->getLogin());
+		$hotelContentRQ = new JP_HotelContentRQ(ServiceRequest::JUNIPER_WS_VERSION, $language);
+		$hotelContentRQ->setLogin($this->juniperWebService->getLogin());
 		$hotelContentRQ->setHotelContentList($hotelContentList);
 		return $hotelContentRQ;
 	}
 
 	/**
-	 * @param \JP_HotelContentRQ $hotelContentRQ
-	 * @return \HotelContentResponse
+	 * @param JP_HotelContentRQ $hotelContentRQ
+	 * @return \Juniper\Webservice\HotelContentResponse
 	 */
-	private function getHotelContent(\JP_HotelContentRQ $hotelContentRQ)
+	private function getHotelContent(JP_HotelContentRQ $hotelContentRQ)
 	{
-		$hotelContent = new \HotelContent($hotelContentRQ);
-		$response     = $this->juniperService->getService()->HotelContent($hotelContent);
+		$hotelContent = new HotelContent($hotelContentRQ);
+		$response     = $this->juniperWebService->getService()->HotelContent($hotelContent);
 		return $response;
 	}
 
 	/**
-	 * @param \JP_HotelContent $item
+	 * @param JP_HotelContent $item
 	 * @return array
 	 */
-	private function getHotelDescription(\JP_HotelContent $item)
+	private function getHotelDescription(JP_HotelContent $item)
 	{
 		$descriptions = [];
 		if ($item->getDescriptions()) {
-			$hotelDescription = new HotelDescriptions($item->getDescriptions());
+			$hotelDescription = new Descriptions($item->getDescriptions());
 			$descriptions     = $hotelDescription();
 			return $descriptions;
 		}
@@ -125,14 +139,14 @@ class HotelsContent
 	}
 
 	/**
-	 * @param \JP_HotelContent $item
+	 * @param JP_HotelContent $JP_HotelContent
 	 * @return array
 	 */
-	private function getHotelFeatures(\JP_HotelContent $item)
+	private function getHotelFeatures(JP_HotelContent $JP_HotelContent)
 	{
 		$features = [];
-		if ($item->getFeatures()) {
-			$hotelFeatures = new HotelFeatures($item->getFeatures());
+		if ($JP_HotelContent->getFeatures()) {
+			$hotelFeatures = new Features($JP_HotelContent->getFeatures());
 			$features      = $hotelFeatures();
 			return $features;
 		}
@@ -140,14 +154,14 @@ class HotelsContent
 	}
 
 	/**
-	 * @param \JP_HotelContent $item
+	 * @param JP_HotelContent $JP_HotelContent
 	 * @return array
 	 */
-	private function getHotelRooms(\JP_HotelContent $item)
+	private function getHotelRooms(JP_HotelContent $JP_HotelContent)
 	{
 		$rooms = [];
-		if ($item->getHotelRooms()) {
-			$hotelRooms = new HotelRooms($item->getHotelRooms());
+		if ($JP_HotelContent->getHotelRooms()) {
+			$hotelRooms = new Rooms($JP_HotelContent->getHotelRooms());
 			$rooms      = $hotelRooms();
 			return $rooms;
 		}
@@ -155,14 +169,14 @@ class HotelsContent
 	}
 
 	/**
-	 * @param \JP_HotelContent $item
+	 * @param JP_HotelContent $JP_HotelContent
 	 * @return array
 	 */
-	private function getContactInfo(\JP_HotelContent $item)
+	private function getContactInfo(JP_HotelContent $JP_HotelContent)
 	{
 		$contact_info = [];
-		if ($item->getContactInfo()) {
-			$hotelContactInfo = new HotelContactInfo($item->getContactInfo());
+		if ($JP_HotelContent->getContactInfo()) {
+			$hotelContactInfo = new ContactInfo($JP_HotelContent->getContactInfo());
 			$contact_info = [
 				"phones" => $hotelContactInfo->getPhones(),
 				"emails" => $hotelContactInfo->getEmails(),

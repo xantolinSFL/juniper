@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 abstract class JPSOAP_BaseSupleOfferRest
 {
 

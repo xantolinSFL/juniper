@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_HotelRelPaxDist extends JP_RelPaxDist
 {
 

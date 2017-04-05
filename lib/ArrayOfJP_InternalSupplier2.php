@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class ArrayOfJP_InternalSupplier2 implements \ArrayAccess, \Iterator, \Countable
 {
 

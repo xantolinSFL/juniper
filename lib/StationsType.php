@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class StationsType
 {
     const __default = 'AEO';

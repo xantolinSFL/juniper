@@ -1,17 +1,17 @@
 <?php
 
-namespace StayForLong\Juniper;
+namespace StayForLong\Juniper\Infrastructure\Services;
 
-require_once __DIR__.'/../lib/autoload.php';
+use Juniper\Webservice\JP_Login;
 
 /**
  * Class Login
- * @package StayForLong\Juniper
+ * @package StayForLong\Juniper\Infrastructure\Services
  */
 class Login
 {
 	/**
-	 * @var \JP_Login
+	 * @var JP_Login
 	 */
 	private $login;
 
@@ -22,11 +22,11 @@ class Login
 	 */
 	public function __construct($email, $password)
 	{
-		$this->login = new \JP_Login($password, $email);
+		$this->login = new JP_Login($password, $email);
 	}
 
 	/**
-	 * @return \JP_Login
+	 * @return JP_Login
 	 */
 	public function __invoke()
 	{

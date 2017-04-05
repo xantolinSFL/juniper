@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JPSOAP_ReleaseTypes
 {
     const __default = 'Fixed';

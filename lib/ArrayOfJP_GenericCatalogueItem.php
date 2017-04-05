@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class ArrayOfJP_GenericCatalogueItem implements \ArrayAccess, \Iterator, \Countable
 {
 

@@ -1,16 +1,20 @@
 <?php
 
-namespace StayForLong\Juniper;
+namespace StayForLong\Juniper\Infrastructure\Services;
 
-class JuniperService
+/**
+ * Class JuniperWebService
+ * @package StayForLong\Juniper\Infrastructure\Services
+ */
+class JuniperWebService
 {
 	/**
-	 * @var \JP_Login
+	 * @var Login
 	 */
 	protected $login;
 
 	/**
-	 * @var \WebServiceJP
+	 * @var WebService
 	 */
 	protected $service;
 
@@ -21,22 +25,22 @@ class JuniperService
 
 	/**
 	 * Service constructor.
-	 * @param \JP_Login $JP_Login
-	 * @param \WebServiceJP $webServiceJP
+	 * @param Login $login
+	 * @param WebService $webService
 	 * @param string $language
 	 */
 	public function __construct(
-		\JP_Login $JP_Login,
-		\WebServiceJP $webServiceJP,
-		$language = ServiceRequest::DEFAULT_LANGUAGE
+		Login $login,
+		WebService $webService,
+		$language = WebService::DEFAULT_LANGUAGE
 	) {
-		$this->login    = $JP_Login;
-		$this->service  = $webServiceJP;
+		$this->login    = $login;
+		$this->service  = $webService;
 		$this->language = $language;
 	}
 
 	/**
-	 * @return \JP_Login
+	 * @return Login
 	 */
 	public function getLogin()
 	{
@@ -44,7 +48,7 @@ class JuniperService
 	}
 
 	/**
-	 * @return \WebServiceJP
+	 * @return WebService
 	 */
 	public function getService()
 	{

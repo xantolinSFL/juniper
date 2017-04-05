@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class ArrayOfJP_HotelSimpleContent implements \ArrayAccess, \Iterator, \Countable
 {
 

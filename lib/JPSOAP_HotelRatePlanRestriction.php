@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JPSOAP_HotelRatePlanRestriction extends JPSOAP_BaseSupleOfferRest
 {
 

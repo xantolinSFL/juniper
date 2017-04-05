@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class ArrayOfJPSOAP_Discount2 implements \ArrayAccess, \Iterator, \Countable
 {
 

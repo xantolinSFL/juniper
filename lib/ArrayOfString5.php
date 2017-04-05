@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class ArrayOfString5 implements \ArrayAccess, \Iterator, \Countable
 {
 

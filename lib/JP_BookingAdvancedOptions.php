@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 abstract class JP_BookingAdvancedOptions extends JP_BaseAdvancedOptions
 {
 

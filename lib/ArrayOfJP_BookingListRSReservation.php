@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class ArrayOfJP_BookingListRSReservation implements \ArrayAccess, \Iterator, \Countable
 {
 

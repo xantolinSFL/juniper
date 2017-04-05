@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_PackageOptionChangeProduct extends JP_PackageOptionRQ
 {
 

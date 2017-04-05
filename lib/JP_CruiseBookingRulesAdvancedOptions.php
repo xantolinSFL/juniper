@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_CruiseBookingRulesAdvancedOptions extends JP_BookingRulesAdvancedOptions
 {
 

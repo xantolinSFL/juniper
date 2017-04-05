@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_CruiseCheckAvailAdvancedOptions extends JP_CheckAvailAdvancedOptions
 {
 

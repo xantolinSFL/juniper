@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_SearchSegmentsHotelFutureRates extends JP_SearchSegmentsHotels
 {
 

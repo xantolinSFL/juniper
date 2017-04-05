@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JPSOAP_DateIntervalsGroupsCheckInDates extends JPSOAP_DateIntervalsGroupsStayDates
 {
 

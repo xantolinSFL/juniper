@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JPSOAP_CalculationBySeason
 {
     const __default = 'PerNight';

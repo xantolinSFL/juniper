@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JPSOAP_StayRestrictionsApplication
 {
     const __default = 'TotalBookedNights';

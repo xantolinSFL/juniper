@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_CancelAdvancedOptions extends JP_BaseAdvancedOptions
 {
 

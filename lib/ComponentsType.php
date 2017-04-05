@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class ComponentsType
 {
     const __default = 'FLIGHT';

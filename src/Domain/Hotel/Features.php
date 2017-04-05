@@ -1,8 +1,14 @@
 <?php
 
-namespace StayForLong\Juniper\Hotels;
+namespace StayForLong\Juniper\Domain\Hotel;
 
-class HotelFeatures
+use Juniper\Webservice\ArrayOfJP_Feature;
+
+/**
+ * Class Features
+ * @package StayForLong\Juniper\Domain\Hotel
+ */
+class Features
 {
 	/**
 	 * @var array|\$arrayOfJP_Feature
@@ -10,10 +16,10 @@ class HotelFeatures
 	private $arrayOfJP_Feature = [];
 
 	/**
-	 * HotelDescriptions constructor.
-	 * @param \ArrayOfJP_Feature $arrayOfJP_Feature
+	 * Features constructor.
+	 * @param ArrayOfJP_Feature $arrayOfJP_Feature
 	 */
-	public function __construct(\ArrayOfJP_Feature $arrayOfJP_Feature)
+	public function __construct(ArrayOfJP_Feature $arrayOfJP_Feature)
 	{
 		$this->arrayOfJP_Feature = $arrayOfJP_Feature;
 	}

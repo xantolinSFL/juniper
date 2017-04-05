@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class ArrayOfJP_Hour implements \ArrayAccess, \Iterator, \Countable
 {
 

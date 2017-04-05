@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_HotelRoomSizeUnitType
 {
     const __default = 'ft2';

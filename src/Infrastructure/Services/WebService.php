@@ -1,21 +1,23 @@
 <?php
 
-namespace StayForLong\Juniper;
+namespace StayForLong\Juniper\Infrastructure\Services;
 
-require_once __DIR__.'/../lib/autoload.php';
+use Juniper\Webservice\WebServiceJP;
+
+require "../../../lib/autoload.php";
 
 /**
  * Class ServiceRequest
- * @package StayForLong\Juniper
+ * @package StayForLong\Juniper\Infrastructure\Services
  */
-class ServiceRequest
+class WebService
 {
 	const JUNIPER_WS_VERSION = "1.1";
 
 	const DEFAULT_LANGUAGE = "en";
 
 	/**
-	 * @var \WebServiceJP
+	 * @var WebServiceJP
 	 */
 	private $service;
 
@@ -24,7 +26,7 @@ class ServiceRequest
 	 */
 	public function __construct()
 	{
-		$this->service = new \WebServiceJP([
+		$this->service = new WebServiceJP([
 				"compression" => SOAP_COMPRESSION_ACCEPT
 					| SOAP_COMPRESSION_GZIP
 					| SOAP_COMPRESSION_DEFLATE,
@@ -33,7 +35,7 @@ class ServiceRequest
 	}
 
 	/**
-	 * @return \WebServiceJP
+	 * @return WebServiceJP
 	 */
 	public function __invoke()
 	{

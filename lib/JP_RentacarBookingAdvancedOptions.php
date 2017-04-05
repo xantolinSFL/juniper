@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class JP_RentacarBookingAdvancedOptions extends JP_BookingAdvancedOptions
 {
 

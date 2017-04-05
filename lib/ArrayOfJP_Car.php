@@ -1,5 +1,7 @@
 <?php
 
+namespace Juniper\Webservice;
+
 class ArrayOfJP_Car implements \ArrayAccess, \Iterator, \Countable
 {
 
