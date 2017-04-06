@@ -1,8 +1,7 @@
 <?php
 
-namespace StayForLong\Juniper\Domain\Hotel;
+namespace StayForLong\Juniper\Application\Hotel;
 
-use Carbon\Carbon;
 use Juniper\Webservice\ArrayOfJP_RelPax;
 use Juniper\Webservice\ArrayOfString5;
 use Juniper\Webservice\HotelAvail;
@@ -16,6 +15,8 @@ use Juniper\Webservice\JP_RelPaxesDist;
 use Juniper\Webservice\JP_RequestHotelsAvail;
 use Juniper\Webservice\JP_SearchSegmentHotels;
 use Juniper\Webservice\JP_SearchSegmentsHotels;
+use StayForLong\Juniper\Domain\Hotel\Country;
+use StayForLong\Juniper\Domain\Hotel\Nights;
 use StayForLong\Juniper\Infrastructure\Services\JuniperWebService;
 use StayForLong\Juniper\Infrastructure\Services\WebService;
 

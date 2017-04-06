@@ -1,6 +1,6 @@
 <?php
 
-namespace StayForLong\Juniper\Hotels;
+namespace StayForLong\Juniper\Application\Hotels;
 
 use Juniper\Webservice\ArrayOfJP_HotelSimpleContent;
 use Juniper\Webservice\HotelContent;
