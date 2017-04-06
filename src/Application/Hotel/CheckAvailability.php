@@ -7,6 +7,7 @@ use Juniper\Webservice\HotelCheckAvail;
 use Juniper\Webservice\JP_HotelCheckAvail;
 use Juniper\Webservice\JP_HotelCheckAvailRequest;
 use Juniper\Webservice\JP_HotelOptionRequest;
+use Juniper\Webservice\JP_SearchSegmentHotels;
 use Juniper\Webservice\JP_SearchSegmentsHotels;
 use StayForLong\Juniper\Domain\Hotel\Rate;
 use StayForLong\Juniper\Infrastructure\Services\JuniperWebService;
@@ -24,11 +25,6 @@ class CheckAvailability
 	private $juniperWebService;
 
 	/**
-	 * @var Rate
-	 */
-	private $rate;
-
-	/**
 	 * CheckAvailability constructor.
 	 * @param JuniperWebService $juniperWebService
 	 */
@@ -37,28 +33,31 @@ class CheckAvailability
 		$this->juniperWebService = $juniperWebService;
 	}
 
+	/**
+	 * @param Rate $rate
+	 * @param array $hotels_code
+	 * @return \Juniper\Webservice\HotelCheckAvailResponse
+	 */
 	public function __invoke(Rate $rate, array $hotels_code)
 	{
-		$arrayOfString = new ArrayOfString5();
-		$hotelCodes    = $arrayOfString->setHotelCode($hotels_code);
-
-		$searchSegmentHotels = new JP_SearchSegmentsHotels($rate->start(), $rate->end(), $OriginZone = null,
+		$arrayOfString        = new ArrayOfString5();
+		$hotelCodes           = $arrayOfString->setHotelCode($hotels_code);
+		$searchSegmentHotels  = new JP_SearchSegmentHotels($rate->start(), $rate->end(), $OriginZone = null,
 			$JPDCode = null, $DestinationZone = null);
-		$searchSegmentHotels->setHotelCodes($hotelCodes);
-
+		$searchSegmentsHotels = new JP_SearchSegmentsHotels();
+		$searchSegmentsHotels->setHotelCodes($hotelCodes);
+		$searchSegmentsHotels->setSearchSegmentHotels($searchSegmentHotels);
 		$hotelCheckAvailRequest = new JP_HotelCheckAvailRequest();
-		$JP_HotelOptionRequest  = new JP_HotelOptionRequest($this->rate->planCode());
+		$JP_HotelOptionRequest  = new JP_HotelOptionRequest($rate->planCode());
 		$hotelCheckAvailRequest->setHotelOption($JP_HotelOptionRequest)
-			->setSearchSegmentsHotels($searchSegmentHotels);
-
+			->setSearchSegmentsHotels($searchSegmentsHotels);
 		$JP_HotelCheckAvail = new JP_HotelCheckAvail(WebService::JUNIPER_WS_VERSION,
 			$this->juniperWebService->language());
 		$JP_HotelCheckAvail->setLogin($this->juniperWebService->login())
 			->setHotelCheckAvailRequest($hotelCheckAvailRequest);
 
 		$hotelCheckAvail = new HotelCheckAvail($JP_HotelCheckAvail);
-
-		$response = $this->juniperWebService->service()->HotelCheckAvail($hotelCheckAvail);
+		$response        = $this->juniperWebService->service()->HotelCheckAvail($hotelCheckAvail);
 
 		return $response;
 	}
