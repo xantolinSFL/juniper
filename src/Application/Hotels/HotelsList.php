@@ -42,7 +42,7 @@ class HotelsList
 
 		if ($response->getHotelListRS()->getErrors()) {
 			foreach ($response->getHotelListRS()->getErrors()->getError() as $error) {
-				ServiceHotelsListException::throwBecauseOf($error->getText());
+				ListException::throwBecauseOf($error->getText());
 			}
 		}
 
@@ -79,7 +79,7 @@ class HotelsList
 	}
 }
 
-final class ServiceHotelsListException extends \Exception
+final class ListException extends \Exception
 {
 	public static function throwBecauseOf($messages)
 	{

@@ -44,7 +44,7 @@ class HotelsContent
 	public function __invoke(array $hotels_code)
 	{
 		if (empty($hotels_code)) {
-			ServiceHotelsContentException::throwBecauseOfHotelCodeEmpty();
+			ContentException::throwBecauseOfHotelCodeEmpty();
 		}
 
 		$hotelsCodes = [];
@@ -58,7 +58,7 @@ class HotelsContent
 
 		if ($response->getContentRS()->getErrors()) {
 			foreach ($response->getContentRS()->getErrors()->getError() as $error) {
-				ServiceHotelsContentException::throwBecauseOf($error->getText());
+				ContentException::throwBecauseOf($error->getText());
 			}
 		}
 
@@ -201,7 +201,7 @@ class HotelsContent
 	}
 }
 
-final class ServiceHotelsContentException extends \Exception
+final class ContentException extends \Exception
 {
 	public static function throwBecauseOf($messages)
 	{

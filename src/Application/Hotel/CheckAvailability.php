@@ -59,7 +59,15 @@ class CheckAvailability
 		$hotelCheckAvail = new HotelCheckAvail($JP_HotelCheckAvail);
 		$response        = $this->juniperWebService->service()->HotelCheckAvail($hotelCheckAvail);
 
-		return $response;
+		if ($response->getCheckAvailRS()->getErrors()) {
+			foreach ($response->getCheckAvailRS()->getErrors()->getError() as $error) {
+				AvailabilityException::throwBecauseOf($error->getText());
+			}
+
+			return;
+		}
+
+		return $response->getCheckAvailRS()->getResults()->getHotelResult();
 	}
 }
 

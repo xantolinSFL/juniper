@@ -31,8 +31,19 @@ class Availability
 	 */
 	private $juniperWebService;
 
+	/**
+	 * @var Pax[]
+	 */
 	private $paxes;
+
+	/**
+	 * @var Nights
+	 */
 	private $nights;
+
+	/**
+	 * @var Country
+	 */
 	private $country;
 
 	/**
@@ -57,7 +68,7 @@ class Availability
 	public function __invoke(array $hotels_code)
 	{
 		if (empty($hotels_code)) {
-			ServiceHotelAvailabilityException::throwBecauseOfHotelCodeEmpty();
+			AvailabilityException::throwBecauseOfHotelCodeEmpty();
 		}
 
 		$searchSegmentsHotels = $this->getSearchSegmentsHotels($hotels_code);
@@ -68,7 +79,7 @@ class Availability
 
 		if ($response->getAvailabilityRS()->getErrors()) {
 			foreach ($response->getAvailabilityRS()->getErrors()->getError() as $error) {
-				ServiceHotelAvailabilityException::throwBecauseOf($error->getText());
+				AvailabilityException::throwBecauseOf($error->getText());
 			}
 
 			return;
@@ -111,21 +122,20 @@ class Availability
 		$arrayOfJP_RelPax = new ArrayOfJP_RelPax();
 		$arrayOfJP_RelPax->setRelPax($relPax);
 
-		$relPaxDist[0] = new JP_HotelRelPaxDist();
-		$relPaxDist[0]->setRelPaxes($arrayOfJP_RelPax);
+		$relPaxDist = new JP_HotelRelPaxDist();
+		$relPaxDist->setRelPaxes($arrayOfJP_RelPax);
 
 		$relPaxesDist = new JP_RelPaxesDist();
-		$relPaxesDist->setRelPaxDist($relPaxDist);
+		$relPaxesDist->setRelPaxDist([$relPaxDist]);
 		return $relPaxesDist;
 	}
 
-
 	/**
 	 * @param JP_SearchSegmentsHotels $searchSegmentsHotels
-	 * @param $relPaxesDist
+	 * @param JP_RelPaxesDist $relPaxesDist
 	 * @return JP_RequestHotelsAvail
 	 */
-	private function getHotelRequest(JP_SearchSegmentsHotels $searchSegmentsHotels, $relPaxesDist)
+	private function getHotelRequest(JP_SearchSegmentsHotels $searchSegmentsHotels, JP_RelPaxesDist $relPaxesDist)
 	{
 		$hotelRequest = new JP_RequestHotelsAvail();
 		$hotelRequest->setSearchSegmentsHotels($searchSegmentsHotels);
@@ -161,9 +171,9 @@ class Availability
 		$JP_HotelAvailAdvancedOptions = $this->getAdvancedOptions();
 
 		$hotelAvailRQ = new JP_HotelAvail(WebService::JUNIPER_WS_VERSION, $this->juniperWebService->language());
-		$hotelAvailRQ->setAdvancedOptions($JP_HotelAvailAdvancedOptions);
-		$hotelAvailRQ->setHotelRequest($JP_RequestHotelsAvail);
-		$hotelAvailRQ->setLogin($this->juniperWebService->login());
+		$hotelAvailRQ->setAdvancedOptions($JP_HotelAvailAdvancedOptions)
+			->setHotelRequest($JP_RequestHotelsAvail)
+			->setLogin($this->juniperWebService->login());
 
 		$jp_pax = [];
 		foreach ($this->paxes as $key => $pax) {
@@ -190,7 +200,7 @@ class Availability
 	}
 }
 
-final class ServiceHotelAvailabilityException extends \Exception
+final class AvailabilityException extends \Exception
 {
 	public static function throwBecauseOf($messages)
 	{
