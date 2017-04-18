@@ -25,7 +25,7 @@ class JP_CancelRequest
      * @param int $ItemId
      * @param boolean $OnlyCancellationFees
      */
-    public function __construct($ReservationLocator, $ItemId, $OnlyCancellationFees)
+    public function __construct($ReservationLocator, $ItemId = null, $OnlyCancellationFees = null)
     {
       $this->ReservationLocator = $ReservationLocator;
       $this->ItemId = $ItemId;
