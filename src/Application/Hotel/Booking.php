@@ -84,7 +84,7 @@ class Booking
 		$jpHolder = new JP_Holder();
 		$this->setRelPaxes($jpHolder);
 
-		$comments    = new ArrayOfJP_Comment();
+		$comments = new ArrayOfJP_Comment();
 		if ($bookingRules->comments()) {
 			$jpComment = [];
 			foreach ($bookingRules->comments() as $comment) {
@@ -100,10 +100,11 @@ class Booking
 		$bookingPrice->setPriceRange($priceRange);
 
 		$JP_HotelBookingInfo = new JP_HotelBookingInfo($this->nights->startToString(), $this->nights->endToString());
-		$JP_HotelBookingInfo->setHotelCode($bookingRules->hotelCode());
-		$JP_HotelBookingInfo->setPrice($bookingPrice);
+		$JP_HotelBookingInfo
+			->setHotelCode($bookingRules->hotelCode()[0]) // TODO: Hotel code is array but the seter wait a string.
+			->setPrice($bookingPrice);
 
-		$HotelElement = new JP_HotelElement(0);
+		$HotelElement = new JP_HotelElement(0); // TODO: Only set one element.
 		$HotelElement
 			->setHotelBookingInfo($JP_HotelBookingInfo)
 			->setBookingCode($bookingRules->bookingCode())
@@ -119,11 +120,11 @@ class Booking
 			->setHolder($jpHolder)
 			->setComments($comments)
 			->setExternalBookingReference($bookingRules->reference())
-			->setElements($hotelElements)
-		;
+			->setElements($hotelElements);
 		$hotelBooking = new HotelBooking($JP_HotelBooking);
 
-		$response = $this->juniperWebService->service()->HotelBooking($hotelBooking);
+		$response = $this->juniperWebService->service()
+			->HotelBooking($hotelBooking);
 
 		if ($response->getBookingRS()->getErrors()) {
 			foreach ($response->getBookingRS()->getErrors()->getError() as $error) {

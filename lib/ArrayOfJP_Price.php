@@ -138,7 +138,7 @@ class ArrayOfJP_Price implements \ArrayAccess, \Iterator, \Countable
     /**
      * Countable implementation
      *
-     * @return JP_Price Return count of elements
+     * @return integer Return count of elements
      */
     public function count()
     {

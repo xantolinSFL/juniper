@@ -13,7 +13,7 @@ class HotelBooking
     /**
      * @param JP_HotelBooking $HotelBookingRQ
      */
-    public function __construct($HotelBookingRQ)
+    public function __construct(JP_HotelBooking $HotelBookingRQ)
     {
       $this->HotelBookingRQ = $HotelBookingRQ;
     }
@@ -30,7 +30,7 @@ class HotelBooking
      * @param JP_HotelBooking $HotelBookingRQ
      * @return HotelBooking
      */
-    public function setHotelBookingRQ($HotelBookingRQ)
+    public function setHotelBookingRQ(JP_HotelBooking $HotelBookingRQ)
     {
       $this->HotelBookingRQ = $HotelBookingRQ;
       return $this;

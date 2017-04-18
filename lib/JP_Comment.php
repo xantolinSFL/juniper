@@ -11,13 +11,13 @@ class JP_Comment
     protected $_ = null;
 
     /**
-     * @var JP_CommentType $Type
+     * @var string $Type
      */
     protected $Type = null;
 
     /**
      * @param string $_
-     * @param JP_CommentType $Type
+     * @param string $Type
      */
     public function __construct($_, $Type)
     {
@@ -44,7 +44,7 @@ class JP_Comment
     }
 
     /**
-     * @return JP_CommentType
+     * @return string
      */
     public function getType()
     {

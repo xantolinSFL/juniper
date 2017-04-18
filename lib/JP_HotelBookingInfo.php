@@ -31,18 +31,18 @@ class JP_HotelBookingInfo
     protected $Preferences = null;
 
     /**
-     * @var date $Start
+     * @var string $Start
      */
     protected $Start = null;
 
     /**
-     * @var date $End
+     * @var string $End
      */
     protected $End = null;
 
     /**
-     * @param date $Start
-     * @param date $End
+     * @param string $Start
+     * @param string $End
      */
     public function __construct($Start, $End)
     {

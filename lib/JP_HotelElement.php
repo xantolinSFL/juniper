@@ -30,7 +30,7 @@ class JP_HotelElement extends JP_BaseElement
      * @param JP_HotelBookingInfo $HotelBookingInfo
      * @return JP_HotelElement
      */
-    public function setHotelBookingInfo($HotelBookingInfo)
+    public function setHotelBookingInfo(JP_HotelBookingInfo $HotelBookingInfo)
     {
       $this->HotelBookingInfo = $HotelBookingInfo;
       return $this;
