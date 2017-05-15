@@ -21,14 +21,18 @@ class WebService
 
 	/**
 	 * ServiceRequest constructor.
+	 * @param Wsdl $wsdl
 	 */
-	public function __construct()
+	public function __construct(Wsdl $wsdl = null)
 	{
+		$wsdl_url = (null == $wsdl) ? null : $wsdl->url();
+
 		$this->service = new WebServiceJP([
-				"compression" => SOAP_COMPRESSION_ACCEPT
-					| SOAP_COMPRESSION_GZIP
-					| SOAP_COMPRESSION_DEFLATE,
-			]
+			"compression" => SOAP_COMPRESSION_ACCEPT
+				| SOAP_COMPRESSION_GZIP
+				| SOAP_COMPRESSION_DEFLATE,
+		],
+			$wsdl_url
 		);
 	}
 
