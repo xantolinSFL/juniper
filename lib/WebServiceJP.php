@@ -1010,6 +1010,16 @@ class WebServiceJP extends \SoapClient
 	);
 
 	/**
+	 * @var string
+	 */
+	private $debug_request;
+
+	/**
+	 * @var string
+	 */
+	private $debug_response;
+
+	/**
 	 * @param array $options A array of config values
 	 * @param string $wsdl The wsdl file to use
 	 */
@@ -1030,6 +1040,35 @@ class WebServiceJP extends \SoapClient
 	}
 
 	/**
+	 * @param string $function_name
+	 * @param $parameters
+	 * @return mixed
+	 */
+	private function soapCall($function_name, $parameters)
+	{
+		$response             = $this->__soapCall($function_name, array($parameters));
+		$this->debug_request  = $this->__getLastRequest();
+		$this->debug_response = $this->__getLastResponse();
+		return $response;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function debugRequest()
+	{
+		return $this->debug_request;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function debugResponse()
+	{
+		return $this->debug_response;
+	}
+
+	/**
 	 * Fields Check payment.
 	 *
 	 * @param CheckPaymentRequiredField $parameters
@@ -1037,7 +1076,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function CheckPaymentRequiredField(CheckPaymentRequiredField $parameters)
 	{
-		return $this->__soapCall('CheckPaymentRequiredField', array($parameters));
+		return $this->soapCall('CheckPaymentRequiredField', array($parameters));
 	}
 
 	/**
@@ -1048,7 +1087,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function CheckPayment(CheckPayment $parameters)
 	{
-		return $this->__soapCall('CheckPayment', array($parameters));
+		return $this->soapCall('CheckPayment', array($parameters));
 	}
 
 	/**
@@ -1059,7 +1098,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function PaymentBooking(PaymentBooking $parameters)
 	{
-		return $this->__soapCall('PaymentBooking', array($parameters));
+		return $this->soapCall('PaymentBooking', array($parameters));
 	}
 
 	/**
@@ -1070,7 +1109,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function ShoppingBasketRead(ShoppingBasketRead $parameters)
 	{
-		return $this->__soapCall('ShoppingBasketRead', array($parameters));
+		return $this->soapCall('ShoppingBasketRead', array($parameters));
 	}
 
 	/**
@@ -1081,7 +1120,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function ShoppingBasketSave(ShoppingBasketSave $parameters)
 	{
-		return $this->__soapCall('ShoppingBasketSave', array($parameters));
+		return $this->soapCall('ShoppingBasketSave', array($parameters));
 	}
 
 	/**
@@ -1092,11 +1131,10 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelBooking(HotelBooking $parameters)
 	{
-		$response = $this->__soapCall('HotelBooking', array($parameters));
-
-		dump($response);
-		$xml = $this->__getLastRequest();
-		dd($xml);
+		$response             = $this->soapCall('HotelBooking', array($parameters));
+		$this->debug_request  = $this->__getLastRequest();
+		$this->debug_response = $this->__getLastResponse();
+		return $response;
 	}
 
 	/**
@@ -1107,7 +1145,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function RentacarBooking(RentacarBooking $parameters)
 	{
-		return $this->__soapCall('RentacarBooking', array($parameters));
+		return $this->soapCall('RentacarBooking', array($parameters));
 	}
 
 	/**
@@ -1118,7 +1156,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function InsuranceBooking(InsuranceBooking $parameters)
 	{
-		return $this->__soapCall('InsuranceBooking', array($parameters));
+		return $this->soapCall('InsuranceBooking', array($parameters));
 	}
 
 	/**
@@ -1129,7 +1167,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function PackageBooking(PackageBooking $parameters)
 	{
-		return $this->__soapCall('PackageBooking', array($parameters));
+		return $this->soapCall('PackageBooking', array($parameters));
 	}
 
 	/**
@@ -1140,7 +1178,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function FlightBooking(FlightBooking $parameters)
 	{
-		return $this->__soapCall('FlightBooking', array($parameters));
+		return $this->soapCall('FlightBooking', array($parameters));
 	}
 
 	/**
@@ -1151,7 +1189,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function CruiseBooking(CruiseBooking $parameters)
 	{
-		return $this->__soapCall('CruiseBooking', array($parameters));
+		return $this->soapCall('CruiseBooking', array($parameters));
 	}
 
 	/**
@@ -1162,7 +1200,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function ServiceBooking(ServiceBooking $parameters)
 	{
-		return $this->__soapCall('ServiceBooking', array($parameters));
+		return $this->soapCall('ServiceBooking', array($parameters));
 	}
 
 	/**
@@ -1173,7 +1211,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function TransferBooking(TransferBooking $parameters)
 	{
-		return $this->__soapCall('TransferBooking', array($parameters));
+		return $this->soapCall('TransferBooking', array($parameters));
 	}
 
 	/**
@@ -1184,7 +1222,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function VisaBooking(VisaBooking $parameters)
 	{
-		return $this->__soapCall('VisaBooking', array($parameters));
+		return $this->soapCall('VisaBooking', array($parameters));
 	}
 
 	/**
@@ -1195,7 +1233,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function CancelBooking(CancelBooking $parameters)
 	{
-		return $this->__soapCall('CancelBooking', array($parameters));
+		return $this->soapCall('CancelBooking', array($parameters));
 	}
 
 	/**
@@ -1206,7 +1244,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function ReadBooking(ReadBooking $parameters)
 	{
-		return $this->__soapCall('ReadBooking', array($parameters));
+		return $this->soapCall('ReadBooking', array($parameters));
 	}
 
 	/**
@@ -1217,7 +1255,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function BookingList(BookingList $parameters)
 	{
-		return $this->__soapCall('BookingList', array($parameters));
+		return $this->soapCall('BookingList', array($parameters));
 	}
 
 	/**
@@ -1228,7 +1266,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function FinalCustomerSave(FinalCustomerSave $parameters)
 	{
-		return $this->__soapCall('FinalCustomerSave', array($parameters));
+		return $this->soapCall('FinalCustomerSave', array($parameters));
 	}
 
 	/**
@@ -1239,7 +1277,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelModify(HotelModify $parameters)
 	{
-		return $this->__soapCall('HotelModify', array($parameters));
+		return $this->soapCall('HotelModify', array($parameters));
 	}
 
 	/**
@@ -1250,7 +1288,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelConfirmModify(HotelConfirmModify $parameters)
 	{
-		return $this->__soapCall('HotelConfirmModify', array($parameters));
+		return $this->soapCall('HotelConfirmModify', array($parameters));
 	}
 
 	/**
@@ -1261,7 +1299,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelAvail(HotelAvail $parameters)
 	{
-		return $this->__soapCall('HotelAvail', array($parameters));
+		return $this->soapCall('HotelAvail', array($parameters));
 	}
 
 	/**
@@ -1272,7 +1310,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function RentacarAvail(RentacarAvail $parameters)
 	{
-		return $this->__soapCall('RentacarAvail', array($parameters));
+		return $this->soapCall('RentacarAvail', array($parameters));
 	}
 
 	/**
@@ -1283,7 +1321,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelAvailCalendar(HotelAvailCalendar $parameters)
 	{
-		return $this->__soapCall('HotelAvailCalendar', array($parameters));
+		return $this->soapCall('HotelAvailCalendar', array($parameters));
 	}
 
 	/**
@@ -1294,7 +1332,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelFutureRates(HotelFutureRates $parameters)
 	{
-		return $this->__soapCall('HotelFutureRates', array($parameters));
+		return $this->soapCall('HotelFutureRates', array($parameters));
 	}
 
 	/**
@@ -1305,7 +1343,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function PackageAvail(PackageAvail $parameters)
 	{
-		return $this->__soapCall('PackageAvail', array($parameters));
+		return $this->soapCall('PackageAvail', array($parameters));
 	}
 
 	/**
@@ -1316,7 +1354,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function PackageChangeProduct(PackageChangeProduct $parameters)
 	{
-		return $this->__soapCall('PackageChangeProduct', array($parameters));
+		return $this->soapCall('PackageChangeProduct', array($parameters));
 	}
 
 	/**
@@ -1327,7 +1365,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function FlightAvail(FlightAvail $parameters)
 	{
-		return $this->__soapCall('FlightAvail', array($parameters));
+		return $this->soapCall('FlightAvail', array($parameters));
 	}
 
 	/**
@@ -1338,7 +1376,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function CruisePreAvail(CruisePreAvail $parameters)
 	{
-		return $this->__soapCall('CruisePreAvail', array($parameters));
+		return $this->soapCall('CruisePreAvail', array($parameters));
 	}
 
 	/**
@@ -1349,7 +1387,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function CruiseAvail(CruiseAvail $parameters)
 	{
-		return $this->__soapCall('CruiseAvail', array($parameters));
+		return $this->soapCall('CruiseAvail', array($parameters));
 	}
 
 	/**
@@ -1360,7 +1398,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function InsuranceAvail(InsuranceAvail $parameters)
 	{
-		return $this->__soapCall('InsuranceAvail', array($parameters));
+		return $this->soapCall('InsuranceAvail', array($parameters));
 	}
 
 	/**
@@ -1371,7 +1409,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function ServiceAvail(ServiceAvail $parameters)
 	{
-		return $this->__soapCall('ServiceAvail', array($parameters));
+		return $this->soapCall('ServiceAvail', array($parameters));
 	}
 
 	/**
@@ -1382,7 +1420,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function TransferAvail(TransferAvail $parameters)
 	{
-		return $this->__soapCall('TransferAvail', array($parameters));
+		return $this->soapCall('TransferAvail', array($parameters));
 	}
 
 	/**
@@ -1393,7 +1431,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function TransferAvailByHotel(TransferAvailByHotel $parameters)
 	{
-		return $this->__soapCall('TransferAvailByHotel', array($parameters));
+		return $this->soapCall('TransferAvailByHotel', array($parameters));
 	}
 
 	/**
@@ -1404,7 +1442,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function VisaAvail(VisaAvail $parameters)
 	{
-		return $this->__soapCall('VisaAvail', array($parameters));
+		return $this->soapCall('VisaAvail', array($parameters));
 	}
 
 	/**
@@ -1415,7 +1453,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelAllotment(HotelAllotment $parameters)
 	{
-		return $this->__soapCall('HotelAllotment', array($parameters));
+		return $this->soapCall('HotelAllotment', array($parameters));
 	}
 
 	/**
@@ -1426,7 +1464,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelRates(HotelRates $parameters)
 	{
-		return $this->__soapCall('HotelRates', array($parameters));
+		return $this->soapCall('HotelRates', array($parameters));
 	}
 
 	/**
@@ -1437,7 +1475,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelSpecifications(HotelSpecifications $parameters)
 	{
-		return $this->__soapCall('HotelSpecifications', array($parameters));
+		return $this->soapCall('HotelSpecifications', array($parameters));
 	}
 
 	/**
@@ -1448,7 +1486,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelListInventory(HotelListInventory $parameters)
 	{
-		return $this->__soapCall('HotelListInventory', array($parameters));
+		return $this->soapCall('HotelListInventory', array($parameters));
 	}
 
 	/**
@@ -1459,7 +1497,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function FinalCustomerRead(FinalCustomerRead $parameters)
 	{
-		return $this->__soapCall('FinalCustomerRead', array($parameters));
+		return $this->soapCall('FinalCustomerRead', array($parameters));
 	}
 
 	/**
@@ -1470,7 +1508,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function AgencyRead(AgencyRead $parameters)
 	{
-		return $this->__soapCall('AgencyRead', array($parameters));
+		return $this->soapCall('AgencyRead', array($parameters));
 	}
 
 	/**
@@ -1481,7 +1519,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function SupplierList(SupplierList $parameters)
 	{
-		return $this->__soapCall('SupplierList', array($parameters));
+		return $this->soapCall('SupplierList', array($parameters));
 	}
 
 	/**
@@ -1492,7 +1530,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function GenericDataCatalogue(GenericDataCatalogue $parameters)
 	{
-		return $this->__soapCall('GenericDataCatalogue', array($parameters));
+		return $this->soapCall('GenericDataCatalogue', array($parameters));
 	}
 
 	/**
@@ -1503,7 +1541,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function ZoneList(ZoneList $parameters)
 	{
-		return $this->__soapCall('ZoneList', array($parameters));
+		return $this->soapCall('ZoneList', array($parameters));
 	}
 
 	/**
@@ -1514,7 +1552,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function CityList(CityList $parameters)
 	{
-		return $this->__soapCall('CityList', array($parameters));
+		return $this->soapCall('CityList', array($parameters));
 	}
 
 	/**
@@ -1525,7 +1563,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelCatalogueData(HotelCatalogueData $parameters)
 	{
-		return $this->__soapCall('HotelCatalogueData', array($parameters));
+		return $this->soapCall('HotelCatalogueData', array($parameters));
 	}
 
 	/**
@@ -1536,7 +1574,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelList(HotelList $parameters)
 	{
-		return $this->__soapCall('HotelList', array($parameters));
+		return $this->soapCall('HotelList', array($parameters));
 	}
 
 	/**
@@ -1547,7 +1585,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelPortfolio(HotelPortfolio $parameters)
 	{
-		return $this->__soapCall('HotelPortfolio', array($parameters));
+		return $this->soapCall('HotelPortfolio', array($parameters));
 	}
 
 	/**
@@ -1558,7 +1596,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function CruiseItinerary(CruiseItinerary $parameters)
 	{
-		return $this->__soapCall('CruiseItinerary', array($parameters));
+		return $this->soapCall('CruiseItinerary', array($parameters));
 	}
 
 	/**
@@ -1569,7 +1607,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function CruiseShip(CruiseShip $parameters)
 	{
-		return $this->__soapCall('CruiseShip', array($parameters));
+		return $this->soapCall('CruiseShip', array($parameters));
 	}
 
 	/**
@@ -1580,7 +1618,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function CruiseDataList(CruiseDataList $parameters)
 	{
-		return $this->__soapCall('CruiseDataList', array($parameters));
+		return $this->soapCall('CruiseDataList', array($parameters));
 	}
 
 	/**
@@ -1591,7 +1629,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function PackageList(PackageList $parameters)
 	{
-		return $this->__soapCall('PackageList', array($parameters));
+		return $this->soapCall('PackageList', array($parameters));
 	}
 
 	/**
@@ -1602,7 +1640,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function PackageCalendarPrice(PackageCalendarPrice $parameters)
 	{
-		return $this->__soapCall('PackageCalendarPrice', array($parameters));
+		return $this->soapCall('PackageCalendarPrice', array($parameters));
 	}
 
 	/**
@@ -1613,7 +1651,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function PackageSearcher(PackageSearcher $parameters)
 	{
-		return $this->__soapCall('PackageSearcher', array($parameters));
+		return $this->soapCall('PackageSearcher', array($parameters));
 	}
 
 	/**
@@ -1624,7 +1662,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function RentacarLocationList(RentacarLocationList $parameters)
 	{
-		return $this->__soapCall('RentacarLocationList', array($parameters));
+		return $this->soapCall('RentacarLocationList', array($parameters));
 	}
 
 	/**
@@ -1635,7 +1673,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function ServiceCatalogueData(ServiceCatalogueData $parameters)
 	{
-		return $this->__soapCall('ServiceCatalogueData', array($parameters));
+		return $this->soapCall('ServiceCatalogueData', array($parameters));
 	}
 
 	/**
@@ -1646,7 +1684,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function TransferCatalogueData(TransferCatalogueData $parameters)
 	{
-		return $this->__soapCall('TransferCatalogueData', array($parameters));
+		return $this->soapCall('TransferCatalogueData', array($parameters));
 	}
 
 	/**
@@ -1657,7 +1695,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function VisaCatalogueData(VisaCatalogueData $parameters)
 	{
-		return $this->__soapCall('VisaCatalogueData', array($parameters));
+		return $this->soapCall('VisaCatalogueData', array($parameters));
 	}
 
 	/**
@@ -1668,7 +1706,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function MeetingPointList(MeetingPointList $parameters)
 	{
-		return $this->__soapCall('MeetingPointList', array($parameters));
+		return $this->soapCall('MeetingPointList', array($parameters));
 	}
 
 	/**
@@ -1679,7 +1717,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelContent(HotelContent $parameters)
 	{
-		return $this->__soapCall('HotelContent', array($parameters));
+		return $this->soapCall('HotelContent', array($parameters));
 	}
 
 	/**
@@ -1690,7 +1728,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function PackageContent(PackageContent $parameters)
 	{
-		return $this->__soapCall('PackageContent', array($parameters));
+		return $this->soapCall('PackageContent', array($parameters));
 	}
 
 	/**
@@ -1701,7 +1739,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function RentacarLocationContent(RentacarLocationContent $parameters)
 	{
-		return $this->__soapCall('RentacarLocationContent', array($parameters));
+		return $this->soapCall('RentacarLocationContent', array($parameters));
 	}
 
 	/**
@@ -1712,7 +1750,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelCheckAvail(HotelCheckAvail $parameters)
 	{
-		return $this->__soapCall('HotelCheckAvail', array($parameters));
+		return $this->soapCall('HotelCheckAvail', array($parameters));
 	}
 
 	/**
@@ -1723,7 +1761,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function RentacarCheckAvail(RentacarCheckAvail $parameters)
 	{
-		return $this->__soapCall('RentacarCheckAvail', array($parameters));
+		return $this->soapCall('RentacarCheckAvail', array($parameters));
 	}
 
 	/**
@@ -1734,7 +1772,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function InsuranceCheckAvail(InsuranceCheckAvail $parameters)
 	{
-		return $this->__soapCall('InsuranceCheckAvail', array($parameters));
+		return $this->soapCall('InsuranceCheckAvail', array($parameters));
 	}
 
 	/**
@@ -1745,7 +1783,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function PackageCheckAvail(PackageCheckAvail $parameters)
 	{
-		return $this->__soapCall('PackageCheckAvail', array($parameters));
+		return $this->soapCall('PackageCheckAvail', array($parameters));
 	}
 
 	/**
@@ -1756,7 +1794,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function FlightCheckAvail(FlightCheckAvail $parameters)
 	{
-		return $this->__soapCall('FlightCheckAvail', array($parameters));
+		return $this->soapCall('FlightCheckAvail', array($parameters));
 	}
 
 	/**
@@ -1767,7 +1805,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function CruiseCheckAvail(CruiseCheckAvail $parameters)
 	{
-		return $this->__soapCall('CruiseCheckAvail', array($parameters));
+		return $this->soapCall('CruiseCheckAvail', array($parameters));
 	}
 
 	/**
@@ -1778,7 +1816,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function ServiceCheckAvail(ServiceCheckAvail $parameters)
 	{
-		return $this->__soapCall('ServiceCheckAvail', array($parameters));
+		return $this->soapCall('ServiceCheckAvail', array($parameters));
 	}
 
 	/**
@@ -1789,7 +1827,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function TransferCheckAvail(TransferCheckAvail $parameters)
 	{
-		return $this->__soapCall('TransferCheckAvail', array($parameters));
+		return $this->soapCall('TransferCheckAvail', array($parameters));
 	}
 
 	/**
@@ -1800,7 +1838,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function VisaCheckAvail(VisaCheckAvail $parameters)
 	{
-		return $this->__soapCall('VisaCheckAvail', array($parameters));
+		return $this->soapCall('VisaCheckAvail', array($parameters));
 	}
 
 	/**
@@ -1811,7 +1849,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function HotelBookingRules(HotelBookingRules $parameters)
 	{
-		return $this->__soapCall('HotelBookingRules', array($parameters));
+		return $this->soapCall('HotelBookingRules', array($parameters));
 	}
 
 	/**
@@ -1822,7 +1860,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function RentacarBookingRules(RentacarBookingRules $parameters)
 	{
-		return $this->__soapCall('RentacarBookingRules', array($parameters));
+		return $this->soapCall('RentacarBookingRules', array($parameters));
 	}
 
 	/**
@@ -1833,7 +1871,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function FlightBookingRules(FlightBookingRules $parameters)
 	{
-		return $this->__soapCall('FlightBookingRules', array($parameters));
+		return $this->soapCall('FlightBookingRules', array($parameters));
 	}
 
 	/**
@@ -1844,7 +1882,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function InsuranceBookingRules(InsuranceBookingRules $parameters)
 	{
-		return $this->__soapCall('InsuranceBookingRules', array($parameters));
+		return $this->soapCall('InsuranceBookingRules', array($parameters));
 	}
 
 	/**
@@ -1855,7 +1893,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function PackageBookingRules(PackageBookingRules $parameters)
 	{
-		return $this->__soapCall('PackageBookingRules', array($parameters));
+		return $this->soapCall('PackageBookingRules', array($parameters));
 	}
 
 	/**
@@ -1866,7 +1904,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function CruiseBookingRules(CruiseBookingRules $parameters)
 	{
-		return $this->__soapCall('CruiseBookingRules', array($parameters));
+		return $this->soapCall('CruiseBookingRules', array($parameters));
 	}
 
 	/**
@@ -1877,7 +1915,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function ServiceBookingRules(ServiceBookingRules $parameters)
 	{
-		return $this->__soapCall('ServiceBookingRules', array($parameters));
+		return $this->soapCall('ServiceBookingRules', array($parameters));
 	}
 
 	/**
@@ -1888,7 +1926,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function TransferBookingRules(TransferBookingRules $parameters)
 	{
-		return $this->__soapCall('TransferBookingRules', array($parameters));
+		return $this->soapCall('TransferBookingRules', array($parameters));
 	}
 
 	/**
@@ -1899,7 +1937,7 @@ class WebServiceJP extends \SoapClient
 	 */
 	public function VisaBookingRules(VisaBookingRules $parameters)
 	{
-		return $this->__soapCall('VisaBookingRules', array($parameters));
+		return $this->soapCall('VisaBookingRules', array($parameters));
 	}
 
 }
