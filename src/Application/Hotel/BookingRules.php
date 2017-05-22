@@ -2,6 +2,7 @@
 
 namespace StayForLong\Juniper\Application\Hotel;
 
+
 use Juniper\Webservice\ArrayOfJP_RelPax;
 use Juniper\Webservice\ArrayOfString5;
 use Juniper\Webservice\HotelBookingRules;
@@ -17,12 +18,13 @@ use Juniper\Webservice\JP_RelPax;
 use Juniper\Webservice\JP_RelPaxesDist;
 use Juniper\Webservice\JP_SearchSegmentHotels;
 use Juniper\Webservice\JP_SearchSegmentsHotels;
-use StayForLong\Juniper\Domain\Hotel\Rate;
+use StayForLong\Juniper\Domain\Hotel\BookingRules as BookingRulesValueObject;
 use StayForLong\Juniper\Domain\Hotel\Country;
 use StayForLong\Juniper\Domain\Hotel\Nights;
+use StayForLong\Juniper\Domain\Hotel\Rate;
 use StayForLong\Juniper\Infrastructure\Services\JuniperWebService;
 use StayForLong\Juniper\Infrastructure\Services\WebService;
-use StayForLong\Juniper\Domain\Hotel\BookingRules as BookingRulesValueObject;
+use StayForLong\Juniper\Infrastructure\Transformer\BookingRulesTransformer;
 
 /**
  * Class BookingRules
@@ -60,7 +62,7 @@ class BookingRules
 	 */
 	public function __invoke(Rate $rate, $hotel_code, $reference, array $comments = [])
 	{
-		$hotels_code          = [$hotel_code];
+		$hotels_code = [$hotel_code];
 
 		$arrayOfString        = new ArrayOfString5();
 		$hotelCodes           = $arrayOfString->setHotelCode($hotels_code);
@@ -114,9 +116,13 @@ class BookingRules
 			 */
 			$optionBookingRules = $resultsBookingRule->getHotelOptions()->getHotelOption();
 			foreach ($optionBookingRules as $bookingRules) {
-				$BookingRules          = new BookingRulesValueObject($bookingRules, $hotels_code, $reference,
+				$bookingRulesTransformer = new BookingRulesTransformer(
+					$bookingRules,
+					$hotel_code,
+					$reference,
 					$comments);
-				$optionsBookingRules[] = $BookingRules;
+				$BookingRules            = $bookingRulesTransformer->transform();
+				$optionsBookingRules[]   = $BookingRules;
 			}
 		}
 

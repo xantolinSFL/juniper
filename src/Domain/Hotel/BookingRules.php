@@ -3,7 +3,6 @@
 namespace StayForLong\Juniper\Domain\Hotel;
 
 use Juniper\Webservice\JP_BookingCode;
-use Juniper\Webservice\JP_HotelOptionBookingRules;
 
 class BookingRules
 {
@@ -42,27 +41,20 @@ class BookingRules
 	 */
 	private $currency;
 
+	/** @var array */
+	private $cancellationPolicies;
+
 	/**
 	 * BookingRules constructor.
-	 * @param JP_HotelOptionBookingRules $bookingRules
+	 * @param JP_BookingCode $code
 	 * @param string $hotel_code
 	 * @param string $reference
-	 * @param array $comments
 	 */
-	public function __construct(JP_HotelOptionBookingRules $bookingRules, $hotel_code, $reference, array $comments = [])
+	public function __construct(JP_BookingCode $code, $hotel_code, $reference)
 	{
-		$this->bookingCode = new JP_BookingCode($bookingRules->getBookingCode()->get_(),
-			$bookingRules->getBookingCode()->getExpirationDate());
-
-		$this->hotel_code = $hotel_code;
-		$this->reference  = $reference;
-		$this->comments   = $comments;
-
-		$prices           = $bookingRules->getPriceInformation()->getPrices();
-		$number_of_prices = $bookingRules->getPriceInformation()->getPrices()->count();
-		$this->currency   = $prices[0]->getCurrency();
-		$this->min_price  = $prices[0]->getTotalFixAmounts()->getNett();
-		$this->max_price  = $prices[$number_of_prices-1]->getTotalFixAmounts()->getNett();
+		$this->bookingCode = $code;
+		$this->hotel_code  = $hotel_code;
+		$this->reference   = $reference;
 	}
 
 	/**
@@ -120,4 +112,63 @@ class BookingRules
 	{
 		return $this->currency;
 	}
+
+	/**
+	 * @param array $comments
+	 * @return $this
+	 */
+	public function setComments(array $comments)
+	{
+		$this->comments = $comments;
+		return $this;
+	}
+
+	/**
+	 * @param float $min_price
+	 * @return $this
+	 */
+	public function setMinPrice(float $min_price)
+	{
+		$this->min_price = $min_price;
+		return $this;
+	}
+
+	/**
+	 * @param float $max_price
+	 * @return $this
+	 */
+	public function setMaxPrice(float $max_price)
+	{
+		$this->max_pice = $max_price;
+		return $this;
+	}
+
+	/**
+	 * @param string $currency
+	 * @return $this
+	 */
+	public function setCurrency(string $currency)
+	{
+		$this->currency = $currency;
+		return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function cancellationPolicies()
+	{
+		return $this->cancellationPolicies;
+	}
+
+	/**
+	 * @param array $cancellationPolicies
+	 * @return $this
+	 */
+	public function setCancellationPolicies(array $cancellationPolicies)
+	{
+		$this->cancellationPolicies = $cancellationPolicies;
+		return $this;
+	}
+
 }
