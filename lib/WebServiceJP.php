@@ -1041,12 +1041,12 @@ class WebServiceJP extends \SoapClient
 
 	/**
 	 * @param string $function_name
-	 * @param $parameters
+	 * @param array $parameters
 	 * @return mixed
 	 */
-	private function soapCall($function_name, $parameters)
+	private function soapCall($function_name, array $parameters = [])
 	{
-		$response             = $this->__soapCall($function_name, array($parameters));
+		$response             = $this->__soapCall($function_name, $parameters);
 		$this->debug_request  = $this->__getLastRequest();
 		$this->debug_response = $this->__getLastResponse();
 		return $response;
