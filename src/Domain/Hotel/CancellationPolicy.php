@@ -66,5 +66,5 @@ class CancellationPolicy
 	{
 		return $this->percentPrice;
 	}
-	
+
 }
