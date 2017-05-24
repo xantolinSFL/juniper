@@ -19,8 +19,6 @@ use Juniper\Webservice\JP_RelPaxesDist;
 use Juniper\Webservice\JP_SearchSegmentHotels;
 use Juniper\Webservice\JP_SearchSegmentsHotels;
 use StayForLong\Juniper\Domain\Hotel\BookingRules as BookingRulesValueObject;
-use StayForLong\Juniper\Domain\Hotel\Country;
-use StayForLong\Juniper\Domain\Hotel\Nights;
 use StayForLong\Juniper\Domain\Hotel\Rate;
 use StayForLong\Juniper\Infrastructure\Services\JuniperWebService;
 use StayForLong\Juniper\Infrastructure\Services\WebService;
@@ -37,20 +35,16 @@ class BookingRules
 	 */
 	private $juniperWebService;
 	private $paxes;
-	private $nights;
-	private $country;
 
 	/**
 	 * BookingRules constructor.
 	 * @param JuniperWebService $juniperWebService
 	 * @param Pax[] $paxes
 	 */
-	public function __construct(JuniperWebService $juniperWebService, $paxes, Nights $nights, Country $country)
+	public function __construct(JuniperWebService $juniperWebService, $paxes)
 	{
 		$this->juniperWebService = $juniperWebService;
 		$this->paxes             = $paxes;
-		$this->nights            = $nights;
-		$this->country           = $country;
 	}
 
 	/**
