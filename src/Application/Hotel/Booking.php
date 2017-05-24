@@ -46,6 +46,9 @@ class Booking
 	 */
 	private $nights;
 
+	/** @var BookingRules */
+	private $bookingRules;
+
 	/**
 	 * BookingRules constructor.
 	 * @param JuniperWebService $juniperWebService
@@ -65,72 +68,25 @@ class Booking
 	 */
 	public function __invoke(BookingRules $bookingRules)
 	{
-		$jp_pax = [];
-		foreach ($this->paxes as $key => $pax) {
-			$jpPax = new JP_Pax($pax->idPax(), $gender = null);
-			$jpPax->setAge($pax->age())
-				->setName($pax->name())
-				->setSurname($pax->surname());
-
-			$jp_pax[$key] = new JP_Pax($pax->idPax(), $gender = null);
-			$jp_pax[$key]->setAge($pax->age());
-			$jp_pax[$key]->setName($pax->name());
-			$jp_pax[$key]->setSurname($pax->surname());
-		}
-
-		$paxes = new JP_Paxes($AdultsFree = 0, $ChildrenFree = 0);
-		$paxes->setPax($jp_pax);
-
-		$jpHolder = new JP_Holder();
-		$this->setRelPaxes($jpHolder);
-
-		$comments = new ArrayOfJP_Comment();
-		if ($bookingRules->comments()) {
-			$jpComment = [];
-			foreach ($bookingRules->comments() as $comment) {
-				$jpComment[] = new JP_Comment($comment, JP_CommentType::HOT);
-			}
-
-			$comments->setComment($jpComment);
-		}
-
-		$priceRange   = new JP_PriceRange($bookingRules->minPrice(), $bookingRules->maxPrice(),
-			$bookingRules->currency());
-		$bookingPrice = new JP_BookingPrice();
-		$bookingPrice->setPriceRange($priceRange);
-
-		$JP_HotelBookingInfo = new JP_HotelBookingInfo($this->nights->startToString(), $this->nights->endToString());
-		$JP_HotelBookingInfo
-			->setHotelCode($bookingRules->hotelCode()[0]) // TODO: Hotel code is array but the seter wait a string.
-			->setPrice($bookingPrice);
-
-		$HotelElement = new JP_HotelElement(0); // TODO: Only set one element.
-		$HotelElement
-			->setHotelBookingInfo($JP_HotelBookingInfo)
-			->setBookingCode($bookingRules->bookingCode())
-			->setRelPaxesDist($this->getRelPaxesDist());
-
-		$hotelElements = new ArrayOfJP_HotelElement();
-		$hotelElements->setHotelElement([$HotelElement]);
+		$this->bookingRules = $bookingRules;
 
 		$JP_HotelBooking = new JP_HotelBooking(WebService::JUNIPER_WS_VERSION, $this->juniperWebService->language());
 		$JP_HotelBooking
 			->setLogin($this->juniperWebService->login())
-			->setPaxes($paxes)
-			->setHolder($jpHolder)
-			->setComments($comments)
+			->setPaxes($this->getPaxes())
+			->setHolder($this->getHolder())
+			->setComments($this->getComments())
 			->setExternalBookingReference($bookingRules->reference())
-			->setElements($hotelElements);
-		$hotelBooking = new HotelBooking($JP_HotelBooking);
+			->setElements($this->getHotelElements());
 
-		$response = $this->juniperWebService->service()
-			->HotelBooking($hotelBooking);
+		$hotelBooking = new HotelBooking($JP_HotelBooking);
+		
+		$response = $this->juniperWebService->service()->HotelBooking($hotelBooking);
 
 		if ($response->getBookingRS()->getErrors()) {
 			foreach ($response->getBookingRS()->getErrors()->getError() as $error) {
 				BookingException::throwBecauseOf($error->getText());
 			}
-
 			return;
 		}
 
@@ -160,14 +116,77 @@ class Booking
 	}
 
 	/**
-	 * @param JP_Holder $jpHolder
+	 * @return JP_Holder
 	 */
-	private function setRelPaxes(JP_Holder &$jpHolder)
+	private function getHolder()
 	{
-		$pax = $this->paxes[0];
-		$pax->idPax();
-		$relPax = new JP_RelPax($pax->idPax());
+		$jpHolder = new JP_Holder();
+		$pax      = $this->paxes[0];
+		$relPax   = new JP_RelPax($pax->idPax());
 		$jpHolder->setRelPax($relPax);
+		return $jpHolder;
+	}
+
+	/**
+	 * @return JP_Paxes
+	 */
+	private function getPaxes()
+	{
+		$jp_pax = array_map(function (Pax $pax) {
+			return (new JP_Pax($pax->idPax(), $gender = null))
+				->setAge($pax->age())
+				->setName($pax->name())
+				->setSurname($pax->surname());
+		}, $this->paxes);
+
+		$paxes = new JP_Paxes($AdultsFree = 0, $ChildrenFree = 0);
+		$paxes->setPax($jp_pax);
+		return $paxes;
+	}
+
+	/**
+	 * @return ArrayOfJP_Comment
+	 */
+	private function getComments(): ArrayOfJP_Comment
+	{
+		if (empty($this->bookingRules->comments())) {
+			return new ArrayOfJP_Comment();
+		}
+
+		$jpComments = array_map(function ($comment) {
+			return new JP_Comment($comment, JP_CommentType::HOT);
+		}, $this->bookingRules->comments());
+
+		$comments = new ArrayOfJP_Comment();
+		$comments->setComment($jpComments);
+		return $comments;
+	}
+
+	/**
+	 * @return ArrayOfJP_HotelElement
+	 */
+	private function getHotelElements(): ArrayOfJP_HotelElement
+	{
+		$priceRange   = new JP_PriceRange($this->bookingRules->minPrice(), $this->bookingRules->maxPrice(),
+			$this->bookingRules->currency());
+		$bookingPrice = new JP_BookingPrice();
+		$bookingPrice->setPriceRange($priceRange);
+
+		$JP_HotelBookingInfo = new JP_HotelBookingInfo($this->nights->startToString(), $this->nights->endToString());
+		$JP_HotelBookingInfo
+			->setHotelCode($this->bookingRules->hotelCode())
+			->setPrice($bookingPrice);
+
+
+		$HotelElement = new JP_HotelElement(0); // TODO: Only set one element.
+		$HotelElement
+			->setHotelBookingInfo($JP_HotelBookingInfo)
+			->setBookingCode($this->bookingRules->bookingCode())
+			->setRelPaxesDist($this->getRelPaxesDist());
+
+		$hotelElements = new ArrayOfJP_HotelElement();
+		$hotelElements->setHotelElement([$HotelElement]);
+		return $hotelElements;
 	}
 }
 

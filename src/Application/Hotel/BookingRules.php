@@ -79,6 +79,8 @@ class BookingRules
 		foreach ($this->paxes as $key => $pax) {
 			$jp_pax[$key] = new JP_Pax($pax->idPax(), $gender = null);
 			$jp_pax[$key]->setAge($pax->age());
+			$jp_pax[$key]->setName($pax->name());
+			$jp_pax[$key]->setSurname($pax->surname());
 		}
 
 		$paxes = new JP_Paxes($AdultsFree = 0, $ChildrenFree = 0);

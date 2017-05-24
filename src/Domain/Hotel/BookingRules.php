@@ -139,7 +139,7 @@ class BookingRules
 	 */
 	public function setMaxPrice(float $max_price)
 	{
-		$this->max_pice = $max_price;
+		$this->max_price = $max_price;
 		return $this;
 	}
 
