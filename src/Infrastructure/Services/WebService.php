@@ -22,8 +22,9 @@ class WebService
 	/**
 	 * ServiceRequest constructor.
 	 * @param Wsdl $wsdl
+	 * @param bool $trace
 	 */
-	public function __construct(Wsdl $wsdl = null)
+	public function __construct(Wsdl $wsdl = null, $trace = false)
 	{
 		$wsdl_url = (null == $wsdl) ? null : $wsdl->url();
 
@@ -31,6 +32,7 @@ class WebService
 			"compression" => SOAP_COMPRESSION_ACCEPT
 				| SOAP_COMPRESSION_GZIP
 				| SOAP_COMPRESSION_DEFLATE,
+			"trace" => $trace,
 		],
 			$wsdl_url
 		);
