@@ -61,15 +61,16 @@ class BookingRulesTransformer
 				Carbon::parse($cancellationPolicy->getDateFrom() . " " . $cancellationPolicy->getDateFromHour()),
 				Carbon::parse($cancellationPolicy->getDateTo() . " " . $cancellationPolicy->getDateToHour()),
 				$cancellationPolicy->getFixedPrice(),
-				$cancellationPolicy->getPercentPrice()
+				$cancellationPolicy->getPercentPrice(),
+				$this->bookingRules->getCancellationPolicy()->getCurrencyCode()
 			);
 		}
 
 		return (new BookingRules(
 			$bookingCode,
-			$expirationDate,
 			$this->hotel_code,
-			$this->reference))
+			$this->reference)
+		)
 			->setComments($this->comments)
 			->setCurrency($prices->current()->getCurrency())
 			->setMinPrice($prices->current()->getTotalFixAmounts()->getNett())
