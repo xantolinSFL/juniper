@@ -132,7 +132,6 @@ class BookingRules
 	{
 		$relPax = [];
 		foreach ($this->paxes as $key => $pax) {
-			$pax->idPax();
 			$relPax[] = new JP_RelPax($pax->idPax());
 		}
 
