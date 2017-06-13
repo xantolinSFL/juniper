@@ -44,6 +44,9 @@ class BookingRules
 	/** @var array */
 	private $cancellationPolicies;
 
+	/** @var float */
+	private $recommended;
+
 	/**
 	 * BookingRules constructor.
 	 * @param JP_BookingCode $code
@@ -140,6 +143,24 @@ class BookingRules
 	public function setMaxPrice(float $max_price)
 	{
 		$this->max_price = $max_price;
+		return $this;
+	}
+
+	/**
+	 * @return float | null
+	 */
+	public function recommended()
+	{
+		return $this->recommended;
+	}
+
+	/**
+	 * @param float $recommended
+	 * @return $this
+	 */
+	public function setRecommended(float $recommended = null)
+	{
+		$this->recommended = $recommended;
 		return $this;
 	}
 

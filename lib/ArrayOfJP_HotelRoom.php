@@ -138,7 +138,7 @@ class ArrayOfJP_HotelRoom implements \ArrayAccess, \Iterator, \Countable
     /**
      * Countable implementation
      *
-     * @return JP_HotelRoom Return count of elements
+     * @return int Return count of elements
      */
     public function count()
     {

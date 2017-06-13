@@ -75,6 +75,7 @@ class BookingRulesTransformer
 			->setCurrency($prices->current()->getCurrency())
 			->setMinPrice($prices->current()->getTotalFixAmounts()->getNett())
 			->setMaxPrice($prices[$prices_count - 1]->getTotalFixAmounts()->getNett())
+			->setRecommended($prices->current()->getTotalFixAmounts()->getRecommended())
 			->setCancellationPolicies($cancellationPolicies);
 	}
 }
