@@ -20,6 +20,7 @@ use Juniper\Webservice\JP_Paxes;
 use Juniper\Webservice\JP_PriceRange;
 use Juniper\Webservice\JP_RelPax;
 use StayForLong\Juniper\Domain\Hotel\BookingRules;
+use StayForLong\Juniper\Domain\Hotel\Holder;
 use StayForLong\Juniper\Domain\Hotel\Nights;
 use StayForLong\Juniper\Domain\Hotel\Pax;
 use StayForLong\Juniper\Infrastructure\Services\JuniperWebService;
@@ -48,17 +49,21 @@ class Booking
 
 	/** @var BookingRules */
 	private $bookingRules;
+	/** @var Holder */
+	private $holder;
 
 	/**
 	 * BookingRules constructor.
 	 * @param JuniperWebService $juniperWebService
 	 * @param Pax[] $paxes
+	 * @param Holder $holder
 	 * @param Nights $nights
 	 */
-	public function __construct(JuniperWebService $juniperWebService, $paxes, Nights $nights)
+	public function __construct(JuniperWebService $juniperWebService, $paxes, Holder $holder, Nights $nights)
 	{
 		$this->juniperWebService = $juniperWebService;
 		$this->paxes             = $paxes;
+		$this->holder            = $holder;
 		$this->nights            = $nights;
 	}
 
@@ -121,11 +126,25 @@ class Booking
 	private function getHolder()
 	{
 		$jpHolder = new JP_Holder();
-		$pax      = $this->paxes[0];
-		$relPax   = new JP_RelPax($pax->idPax());
+		$relPax   = new JP_RelPax($this->getHolderId());
 		$jpHolder->setRelPax($relPax);
 		return $jpHolder;
 	}
+
+	/**
+	 * @return int
+	 */
+	private function getHolderId()
+	{
+		$max_pax_id = 1;
+		foreach ($this->paxes as $pax) {
+			if ($pax->idPax() > $max_pax_id) {
+				$max_pax_id = $pax->idPax();
+			}
+		}
+		return $max_pax_id+1;
+	}
+
 
 	/**
 	 * @return JP_Paxes
@@ -138,6 +157,11 @@ class Booking
 				->setName($pax->name())
 				->setSurname($pax->surname());
 		}, $this->paxes);
+
+		$jp_pax[] = (new JP_Pax($this->getHolderId(), $gender = null))
+			->setAge($this->holder->age())
+			->setName($this->holder->name())
+			->setSurname($this->holder->surname());
 
 		$paxes = new JP_Paxes($AdultsFree = 0, $ChildrenFree = 0);
 		$paxes->setPax($jp_pax);

@@ -7,22 +7,22 @@ class Pax
 	/**
 	 * @var integer
 	 */
-	private $id_pax;
+	protected $id_pax;
 
 	/**
 	 * @var integer
 	 */
-	private $age;
+	protected $age;
 
 	/**
 	 * @var string
 	 */
-	private $name;
+	protected $name;
 
 	/**
 	 * @var string
 	 */
-	private $surname;
+	protected $surname;
 
 	/**
 	 * Pax constructor.
