@@ -95,7 +95,7 @@ class BookingInfoList
 	 * @param ReadBookingResponse $bookingResponse
 	 * @return BookingInfo
 	 */
-	private function transformBooking(ReadBookingResponse $bookingResponse): BookingInfo
+	private function transformBooking(ReadBookingResponse $bookingResponse)
 	{
 		if (empty($reservation = $bookingResponse->getBookingRS()->getReservations()[0])) {
 			$message = sprintf('No reservations in Juniper Booking Reservation response, throwed in class %s',

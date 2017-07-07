@@ -35,7 +35,7 @@ class DateRange
 	/**
 	 * @return Carbon
 	 */
-	public function dateStart(): Carbon
+	public function dateStart()
 	{
 		return $this->dateStart;
 	}
@@ -43,7 +43,7 @@ class DateRange
 	/**
 	 * @return Carbon
 	 */
-	public function dateEnd(): Carbon
+	public function dateEnd()
 	{
 		return $this->dateEnd;
 	}
@@ -51,7 +51,7 @@ class DateRange
 	/**
 	 * @return int
 	 */
-	public function diffInDays(): int
+	public function diffInDays()
 	{
 		return $this->dateEnd()->diffInDays($this->dateStart(), true);
 	}
