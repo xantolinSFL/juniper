@@ -80,7 +80,7 @@ class BookingInfoList
 	 * @param $reservationLocator
 	 * @return ReadBookingResponse
 	 */
-	private function getBooking(string $reservationLocator)
+	private function getBooking($reservationLocator)
 	{
 		$readBookingRQ = new JP_ReadRQ(WebService::JUNIPER_WS_VERSION, WebService::JUNIPER_WS_VERSION);
 		$readBookingRQ->setLogin($this->juniperWebService->login());
@@ -94,18 +94,19 @@ class BookingInfoList
 	/**
 	 * @param ReadBookingResponse $bookingResponse
 	 * @return BookingInfo
+	 * @throws BookingInfoListException
 	 */
 	private function transformBooking(ReadBookingResponse $bookingResponse)
 	{
 		if (empty($reservation = $bookingResponse->getBookingRS()->getReservations()[0])) {
 			$message = sprintf('No reservations in Juniper Booking Reservation response, throwed in class %s',
 				__CLASS__);
-			BookingInfoListException::throwBecauseOf($message);
+			throw BookingInfoListException::throwBecauseOf($message);
 		}
 		if (empty($hotelData = $reservation->getItems()->getHotelItem()[0])) {
 			$message = sprintf('No hotel item in Juniper Booking Reservation response, throwed in class %s',
 				__CLASS__);
-			BookingInfoListException::throwBecauseOf($message);
+			throw BookingInfoListException::throwBecauseOf($message);
 		}
 		$reservation = $bookingResponse->getBookingRS()->getReservations()[0];
 

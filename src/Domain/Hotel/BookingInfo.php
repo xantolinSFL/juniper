@@ -36,19 +36,19 @@ class BookingInfo
 	 */
 	private $currency;
 
-	public function __construct(string $bookingVoucher, string $bookingStatus, DateRange $dateRange)
+	public function __construct($bookingVoucher, $bookingStatus, DateRange $dateRange)
 	{
 
 		$this->bookingVoucher = $bookingVoucher;
-		$this->bookingStatus = $bookingStatus;
-		$this->dateRange = $dateRange;
+		$this->bookingStatus  = $bookingStatus;
+		$this->dateRange      = $dateRange;
 	}
 
 	/**
 	 * @param string $clientReference
 	 * @return BookingInfo
 	 */
-	public function setClientReference(string $clientReference)
+	public function setClientReference($clientReference)
 	{
 		$this->clientReference = $clientReference;
 
@@ -59,9 +59,20 @@ class BookingInfo
 	 * @param string $hotelCode
 	 * @return BookingInfo
 	 */
-	public function setHotelCode(string $hotelCode)
+	public function setHotelCode($hotelCode)
 	{
 		$this->hotelCode = $hotelCode;
+
+		return $this;
+	}
+
+	/**
+	 * @param string $currency
+	 * @return BookingInfo
+	 */
+	public function setCurrency($currency)
+	{
+		$this->currency = $currency;
 
 		return $this;
 	}
@@ -70,7 +81,7 @@ class BookingInfo
 	 * @param string $amount
 	 * @return BookingInfo
 	 */
-	public function setAmount(string $amount)
+	public function setAmount($amount)
 	{
 		$this->amount = $amount;
 
@@ -80,7 +91,7 @@ class BookingInfo
 	/**
 	 * @return string
 	 */
-	public function BookingVoucher()
+	public function bookingVoucher()
 	{
 		return $this->bookingVoucher;
 	}
@@ -88,7 +99,7 @@ class BookingInfo
 	/**
 	 * @return string
 	 */
-	public function BookingStatus()
+	public function bookingStatus()
 	{
 		return $this->bookingStatus;
 	}
@@ -96,7 +107,7 @@ class BookingInfo
 	/**
 	 * @return DateRange
 	 */
-	public function DateRange()
+	public function dateRange()
 	{
 		return $this->dateRange;
 	}
@@ -104,7 +115,7 @@ class BookingInfo
 	/**
 	 * @return string
 	 */
-	public function ClientReference()
+	public function clientReference()
 	{
 		return $this->clientReference;
 	}
@@ -112,7 +123,7 @@ class BookingInfo
 	/**
 	 * @return string
 	 */
-	public function HotelCode()
+	public function hotelCode()
 	{
 		return $this->hotelCode;
 	}
@@ -120,26 +131,16 @@ class BookingInfo
 	/**
 	 * @return string
 	 */
-	public function Amount()
+	public function amount()
 	{
 		return $this->amount;
 	}
 
-	/**
-	 * @param string $currency
-	 * @return BookingInfo
-	 */
-	public function setCurrency(string $currency)
-	{
-		$this->currency = $currency;
-
-		return $this;
-	}
 
 	/**
 	 * @return string
 	 */
-	public function Currency()
+	public function currency()
 	{
 		return $this->currency;
 	}

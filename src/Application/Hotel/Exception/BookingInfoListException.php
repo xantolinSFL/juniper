@@ -8,6 +8,6 @@ final class BookingInfoListException extends \Exception
 {
 	public static function throwBecauseOf($messages)
 	{
-		throw new self($messages);
+		return new self($messages);
 	}
 }
