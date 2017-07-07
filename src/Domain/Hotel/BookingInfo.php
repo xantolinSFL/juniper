@@ -48,7 +48,7 @@ class BookingInfo
 	 * @param string $clientReference
 	 * @return BookingInfo
 	 */
-	public function setClientReference(string $clientReference): BookingInfo
+	public function setClientReference(string $clientReference)
 	{
 		$this->clientReference = $clientReference;
 
@@ -59,7 +59,7 @@ class BookingInfo
 	 * @param string $hotelCode
 	 * @return BookingInfo
 	 */
-	public function setHotelCode(string $hotelCode): BookingInfo
+	public function setHotelCode(string $hotelCode)
 	{
 		$this->hotelCode = $hotelCode;
 
@@ -70,7 +70,7 @@ class BookingInfo
 	 * @param string $amount
 	 * @return BookingInfo
 	 */
-	public function setAmount(string $amount): BookingInfo
+	public function setAmount(string $amount)
 	{
 		$this->amount = $amount;
 
@@ -80,7 +80,7 @@ class BookingInfo
 	/**
 	 * @return string
 	 */
-	public function BookingVoucher(): string
+	public function BookingVoucher()
 	{
 		return $this->bookingVoucher;
 	}
@@ -88,7 +88,7 @@ class BookingInfo
 	/**
 	 * @return string
 	 */
-	public function BookingStatus(): string
+	public function BookingStatus()
 	{
 		return $this->bookingStatus;
 	}
@@ -96,7 +96,7 @@ class BookingInfo
 	/**
 	 * @return DateRange
 	 */
-	public function DateRange(): DateRange
+	public function DateRange()
 	{
 		return $this->dateRange;
 	}
@@ -104,7 +104,7 @@ class BookingInfo
 	/**
 	 * @return string
 	 */
-	public function ClientReference(): string
+	public function ClientReference()
 	{
 		return $this->clientReference;
 	}
@@ -112,7 +112,7 @@ class BookingInfo
 	/**
 	 * @return string
 	 */
-	public function HotelCode(): string
+	public function HotelCode()
 	{
 		return $this->hotelCode;
 	}
@@ -120,7 +120,7 @@ class BookingInfo
 	/**
 	 * @return string
 	 */
-	public function Amount(): string
+	public function Amount()
 	{
 		return $this->amount;
 	}
@@ -129,7 +129,7 @@ class BookingInfo
 	 * @param string $currency
 	 * @return BookingInfo
 	 */
-	public function setCurrency(string $currency): BookingInfo
+	public function setCurrency(string $currency)
 	{
 		$this->currency = $currency;
 
@@ -139,7 +139,7 @@ class BookingInfo
 	/**
 	 * @return string
 	 */
-	public function Currency(): string
+	public function Currency()
 	{
 		return $this->currency;
 	}
