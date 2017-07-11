@@ -65,4 +65,14 @@ class JuniperWebService
 	{
 		return $this->language;
 	}
+	
+	/**
+	 * @param string $language
+	 * @return $this
+	 */
+	public function setLanguage(string $language)
+	{
+		$this->language = $language;
+		return $this;
+	}
 }
