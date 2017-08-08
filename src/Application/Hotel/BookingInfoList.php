@@ -64,7 +64,9 @@ class BookingInfoList
 		$response = $this->juniperWebService->service()->BookingList(new BookingList($bookingListRQ));
 
 		$bookingList = [];
-
+		if (empty($response->getBookingListRS()->getReservations())) {
+			return $bookingList;
+		}
 		foreach ($response->getBookingListRS()->getReservations() as $reservation) {
 
 			$booking = $this->getBooking($reservation->getLocator());
