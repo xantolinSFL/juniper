@@ -64,7 +64,12 @@ class BookingInfoList
 		$response = $this->juniperWebService->service()->BookingList(new BookingList($bookingListRQ));
 
 		$bookingList = [];
-
+		if (empty($response->getBookingListRS()->getReservations())) {
+			$message = sprintf('No reservations in Juniper Booking Info List response, throwed in class %s',
+				__CLASS__);
+			throw BookingInfoListException::throwBecauseOf($message);
+		}
+		
 		foreach ($response->getBookingListRS()->getReservations() as $reservation) {
 
 			$booking = $this->getBooking($reservation->getLocator());
