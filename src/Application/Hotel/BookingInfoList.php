@@ -69,6 +69,7 @@ class BookingInfoList
 				__CLASS__);
 			throw BookingInfoListException::throwBecauseOf($message);
 		}
+		
 		foreach ($response->getBookingListRS()->getReservations() as $reservation) {
 
 			$booking = $this->getBooking($reservation->getLocator());
