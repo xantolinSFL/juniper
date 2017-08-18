@@ -2,6 +2,7 @@
 
 namespace StayForLong\Juniper\Application\Hotel;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Juniper\Webservice\ArrayOfJP_RelPax;
 use Juniper\Webservice\ArrayOfString5;
 use Juniper\Webservice\HotelAvail;
@@ -17,6 +18,8 @@ use Juniper\Webservice\JP_SearchSegmentHotels;
 use Juniper\Webservice\JP_SearchSegmentsHotels;
 use StayForLong\Juniper\Domain\Hotel\Country;
 use StayForLong\Juniper\Domain\Hotel\Nights;
+use StayForLong\Juniper\Domain\Hotel\Pax;
+use StayForLong\Juniper\Domain\Hotel\PaxId;
 use StayForLong\Juniper\Infrastructure\Services\JuniperWebService;
 use StayForLong\Juniper\Infrastructure\Services\WebService;
 
@@ -47,18 +50,29 @@ class Availability
 	private $country;
 
 	/**
+	 * @var JP_RelPaxesDist
+	 */
+	private $roomsRelPaxes;
+
+	/**
 	 * Availability constructor.
 	 * @param JuniperWebService $juniperWebService
 	 * @param Pax[] $paxes
 	 * @param Nights $nights
 	 * @param Country $country
 	 */
-	public function __construct(JuniperWebService $juniperWebService, $paxes, Nights $nights, Country $country)
-	{
+	public function __construct(
+		JuniperWebService $juniperWebService,
+		$paxes,
+		Nights $nights,
+		Country $country,
+		array $roomsRelPaxes
+	) {
 		$this->juniperWebService = $juniperWebService;
 		$this->paxes             = $paxes;
 		$this->nights            = $nights;
 		$this->country           = $country;
+		$this->roomsRelPaxes     = $roomsRelPaxes;
 	}
 
 	/**
@@ -113,21 +127,24 @@ class Availability
 	 */
 	private function getRelPaxesDist()
 	{
-		$relPax = [];
-		foreach ($this->paxes as $key => $pax) {
-			$pax->idPax();
-			$relPax[] = new JP_RelPax($pax->idPax());
+		$arrayOfPaxDist  = [];
+		$JP_RelPaxesDist = new JP_RelPaxesDist();
+		foreach ($this->roomsRelPaxes as $relPax) {
+			$JP_HotelRelPaxDist = new JP_HotelRelPaxDist();
+			$arrayOfJP_RelPax   = new ArrayOfJP_RelPax();
+			$room               = [];
+			/**
+			 * @var $paxId PaxId
+			 */
+			foreach ($relPax->value() as $paxId) {
+				$room[] = new JP_RelPax($paxId->value());
+			}
+			$arrayOfJP_RelPax->setRelPax($room);
+			$JP_HotelRelPaxDist->setRelPaxes($arrayOfJP_RelPax);
+			$arrayOfPaxDist[] = $JP_HotelRelPaxDist;
 		}
-
-		$arrayOfJP_RelPax = new ArrayOfJP_RelPax();
-		$arrayOfJP_RelPax->setRelPax($relPax);
-
-		$relPaxDist = new JP_HotelRelPaxDist();
-		$relPaxDist->setRelPaxes($arrayOfJP_RelPax);
-
-		$relPaxesDist = new JP_RelPaxesDist();
-		$relPaxesDist->setRelPaxDist([$relPaxDist]);
-		return $relPaxesDist;
+		$JP_RelPaxesDist->setRelPaxDist($arrayOfPaxDist);
+		return $JP_RelPaxesDist;
 	}
 
 	/**
