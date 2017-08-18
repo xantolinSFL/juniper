@@ -15,7 +15,7 @@ class PaxId
 	 * PaxId constructor.
 	 * @param int $pax_id
 	 */
-	public function __construct(int $pax_id)
+	public function __construct($pax_id)
 	{
 		$this->pax_id = $pax_id;
 	}
@@ -23,7 +23,7 @@ class PaxId
 	/**
 	 * @return int
 	 */
-	public function value(): int
+	public function value()
 	{
 		return $this->pax_id;
 	}

@@ -23,7 +23,7 @@ class PaxesInRoom
 	/**
 	 * @return PaxId[]
 	 */
-	public function value(): array
+	public function value()
 	{
 		return $this->idPaxes;
 	}
