@@ -48,6 +48,9 @@ class HotelsList
 
 		$result      = $response->getHotelListRS();
 		$hotels_code = [];
+		if (empty($result->getHotelList()->getHotel())) {
+			return $hotels_code;
+		}
 		foreach ($result->getHotelList()->getHotel() as $item) {
 			$hotels_code[] = $item->getCode();
 		}
