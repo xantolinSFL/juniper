@@ -2,7 +2,6 @@
 
 namespace StayForLong\Juniper\Application\Hotel;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Juniper\Webservice\ArrayOfJP_RelPax;
 use Juniper\Webservice\ArrayOfString5;
 use Juniper\Webservice\HotelAvail;
@@ -16,12 +15,19 @@ use Juniper\Webservice\JP_RelPaxesDist;
 use Juniper\Webservice\JP_RequestHotelsAvail;
 use Juniper\Webservice\JP_SearchSegmentHotels;
 use Juniper\Webservice\JP_SearchSegmentsHotels;
+use StayForLong\Context\Availability\Application\Command\LogProviderAvailabilityErrorsMigrationCommand;
+use StayForLong\Context\Availability\Application\Service\LogProviderAvailabilityErrorsMigration;
+use StayForLong\Context\Availability\Domain\ValueObject\MillisecondsResponseTime;
+use StayForLong\Context\Availability\Domain\ValueObject\ResponseSuccess;
+use StayForLong\Context\Providers\Infrastructure\Constants\Providers;
 use StayForLong\Juniper\Domain\Hotel\Country;
 use StayForLong\Juniper\Domain\Hotel\Nights;
 use StayForLong\Juniper\Domain\Hotel\Pax;
 use StayForLong\Juniper\Domain\Hotel\PaxId;
 use StayForLong\Juniper\Infrastructure\Services\JuniperWebService;
 use StayForLong\Juniper\Infrastructure\Services\WebService;
+use StayForLong\Types\ValueObject\ProviderName;
+
 
 /**
  * Class Availability
@@ -67,7 +73,8 @@ class Availability
 		Nights $nights,
 		Country $country,
 		array $roomsRelPaxes
-	) {
+	)
+	{
 		$this->juniperWebService = $juniperWebService;
 		$this->paxes             = $paxes;
 		$this->nights            = $nights;
@@ -84,7 +91,7 @@ class Availability
 		if (empty($hotels_code)) {
 			AvailabilityException::throwBecauseOfHotelCodeEmpty();
 		}
-
+		$start = microtime(true);
 		$searchSegmentsHotels = $this->getSearchSegmentsHotels($hotels_code);
 		$relPaxesDist         = $this->getRelPaxesDist();
 		$hotelRequest         = $this->getHotelRequest($searchSegmentsHotels, $relPaxesDist);
@@ -92,6 +99,7 @@ class Availability
 		$response             = $this->getHotelAvail($hotelAvailRQ);
 
 		if ($response->getAvailabilityRS()->getErrors()) {
+			$this->logRequestAvailabilityError($start, $this->juniperWebService->service()->debugResponse(), new ProviderName(Providers::W2M_PROVIDER), $this->juniperWebService->service()->debugRequest());
 			foreach ($response->getAvailabilityRS()->getErrors()->getError() as $error) {
 				AvailabilityException::throwBecauseOf($error->getText());
 			}
@@ -184,7 +192,8 @@ class Availability
 	 */
 	private function getHotelAvailRQ(
 		JP_RequestHotelsAvail $JP_RequestHotelsAvail
-	) {
+	)
+	{
 		$JP_HotelAvailAdvancedOptions = $this->getAdvancedOptions();
 
 		$hotelAvailRQ = new JP_HotelAvail(WebService::JUNIPER_WS_VERSION, $this->juniperWebService->language());
@@ -214,6 +223,27 @@ class Availability
 		$hotelAvail = new HotelAvail($hotelAvailRQ);
 		$response   = $this->juniperWebService->service()->HotelAvail($hotelAvail);
 		return $response;
+	}
+
+	/**
+	 * @param int $start
+	 * @param string $error_message
+	 * @param ProviderName $providerName
+	 * @param string $availability_request
+	 */
+	private function logRequestAvailabilityError(int $start, string $error_message, ProviderName $providerName, string $availability_request)
+	{
+		$time_end     = microtime(true);
+		$elapsed_time = (int)(($time_end - $start) * 1000);
+
+		$logProviderAvailabilityMigration = new LogProviderAvailabilityErrorsMigration();
+		$logProviderAvailabilityMigration->handle(new LogProviderAvailabilityErrorsMigrationCommand(
+			$providerName,
+			$availability_request,
+			new ResponseSuccess(false),
+			new MillisecondsResponseTime($elapsed_time),
+			$error_message
+		));
 	}
 }
 
